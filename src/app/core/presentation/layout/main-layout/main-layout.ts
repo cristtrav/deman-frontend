@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { NzIconModule, provideNzIconsPatch } from 'ng-zorro-antd/icon';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { MenuFoldOutline, MenuUnfoldOutline } from '@ant-design/icons-angular/icons'
+import icons from './icons';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { RouterModule } from '@angular/router';
 import { Breadcrumb } from "../../component/breadcrumb/breadcrumb";
-import { MainMenu } from "../../component/main-menu/main-menu";
+import { NzMenuModule } from 'ng-zorro-antd/menu';
 
 @Component({
   selector: 'core-main-layout',
@@ -13,11 +13,11 @@ import { MainMenu } from "../../component/main-menu/main-menu";
     NzIconModule,
     NzLayoutModule,
     NzFlexModule,
+    NzMenuModule,
     RouterModule,
-    Breadcrumb,
-    MainMenu
+    Breadcrumb
 ],
-  providers: [provideNzIconsPatch([MenuFoldOutline, MenuUnfoldOutline])],
+  providers: [provideNzIconsPatch(icons)],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.scss'
 })
