@@ -1,0 +1,19 @@
+<nz-layout>
+    <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
+    <div class="logo"></div>
+    <core-main-menu></core-main-menu>
+    </nz-sider>
+    <nz-layout>
+    <nz-header nz-flex nzAlign="center">
+        <nz-icon
+        class="trigger flex-item"
+        [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+        (click)="isCollapsed = !isCollapsed"
+        />
+        <core-breadcrumb class="flex-item"></core-breadcrumb>
+    </nz-header>
+    <nz-content>
+        <router-outlet></router-outlet>
+    </nz-content>
+    </nz-layout>
+</nz-layout>
