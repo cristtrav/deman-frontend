@@ -2,18 +2,16 @@
     <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
         <div class="logo"></div>
         <ul nz-menu nzTheme="dark" nzMode="inline">
-            <li nz-menu-item nzMatchRouter>
+            <li nz-menu-item routerLink="/app/dashboard" nzMatchRouter>
                 <nz-icon nzType="home" />
-                <span routerLink="/app/dashboard">Inicio</span>
+                <span>Inicio</span>
             </li>
-            <!--<li nz-submenu nzTitle="User" nzIcon="user">
+            <li nz-submenu nzTitle="Productos" nzIcon="product">
                 <ul>
-                    <li nz-menu-item>Tom</li>
-                    <li nz-menu-item>Bill</li>
-                    <li nz-menu-item>Alex</li>
+                    <li nz-menu-item routerLink="/app/marcas" nzMatchRouter>Marcas</li>
                 </ul>
             </li>
-            <li nz-submenu nzTitle="Team" nzIcon="team">
+            <!--<li nz-submenu nzTitle="Team" nzIcon="team">
                 <ul>
                     <li nz-menu-item>Team 1</li>
                     <li nz-menu-item>Team 2</li>
