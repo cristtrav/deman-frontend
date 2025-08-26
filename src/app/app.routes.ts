@@ -7,7 +7,12 @@ export const routes: Routes = [
     { path: 'app', redirectTo: '/app/dashboard', pathMatch: 'full' },
     {
         path: 'app', component: MainLayout, data: { breadcrumb: 'App'}, children: [
-            { path: 'dashboard', component: Dashboard }
+            { path: 'dashboard', component: Dashboard, data: { breadcrumb: 'Dashboard' } },
+            {
+                path: 'marcas',
+                loadComponent: () => import('./feature/marca/presentation/page/marcas/marcas.page').then(m => m.MarcasPage),
+                data: { breadcrumb: 'Marcas'}
+            }
         ]
     }
 ];
