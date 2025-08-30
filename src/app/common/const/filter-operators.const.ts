@@ -1,0 +1,1 @@
+export const FILTER_OPERATORS = ["eq", "neq","like","gte","lte"] as const;
