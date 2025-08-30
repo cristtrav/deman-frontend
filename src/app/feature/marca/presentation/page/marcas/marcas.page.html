@@ -1,0 +1,68 @@
+<core-feature-layout
+    [title]="'Marcas'"
+    [toolbarButtons]="toolbarButtons"
+    [searchFn]="buscar">
+    <nz-table #tabla nzSize="small" [nzData]="marcas" [nzLoading]="isLoading">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Descripción</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (marca of tabla.data; track marca.id) {
+                <tr>
+                    <td>{{ marca.id }}</td>
+                    <td>{{ marca.descripcion }}</td>
+                    <td nz-flex nzGap="small" nzJustify="center">
+                        <button nz-button nzType="primary" (click)="editMarca(marca)">
+                            <nz-icon nzType="edit"></nz-icon>
+                        </button>
+                        <button nz-button nzType="primary" nzDanger (click)="confirmDelete(marca)">
+                            <nz-icon nzType="delete"></nz-icon>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </nz-table>
+</core-feature-layout>
+
+<nz-modal
+    [(nzVisible)]="isModalFormVisible"
+    (nzOnCancel)="hideModalForm()"
+    [nzTitle]="modalTitle"
+    [nzContent]="modalContent"
+    [nzFooter]="modalFooter">
+    <ng-template #modalTitle>
+        {{ formMode == 'add' ? 'Crear marca' : 'Editar marca' }}
+    </ng-template>
+    <ng-template #modalContent>
+        <marca-form
+            [(mode)]="formMode"
+            [editingMarca]="editingMarca"
+            (isSavingChange)="isSaving = $event"
+            (savedMarca)="onSaved()">
+        </marca-form>
+    </ng-template>
+    <ng-template #modalFooter>
+        <div nz-flex nzJustify="flex-end">
+            <button                
+                nz-button
+                nzType="primary"
+                [nzLoading]="isSaving"
+                (click)="marcaFormComp.save()">
+                <nz-icon nzType="save"></nz-icon>
+                {{ formMode == 'add' ? 'Registrar' : 'Editar' }}
+            </button>
+            <button nz-button nzType="default" (click)="marcaFormComp.resetForm()">
+                <nz-icon nzType="clear"></nz-icon>
+                {{ formMode == 'add' ? 'Limpiar' : 'Nuevo' }}
+            </button>
+            <button nz-button nzType="default" (click)="hideModalForm()">
+                Cerrar
+            </button>
+        </div>
+    </ng-template>
+</nz-modal>
