@@ -8,10 +8,19 @@
         </div>
         <div>
             <div nz-flex nzGap="small" nzAlign="center">
+                @if (toolbarButtons) {
                 <div nz-flex nzGap="small">
-                    <button nz-button nzType="primary">Agregar</button>
-                    <button nz-button nzType="default">Recargar</button>
+                    @for (button of toolbarButtons; track $index) {
+                    <button nz-button [nzType]="button.type ?? 'default'" [nzDanger]="button.danger" (click)="activateToolbarAction(button.actionFn)">
+                        @if (button.icon) {
+                            <nz-icon [nzType]="button.icon"></nz-icon>
+                        }
+                        {{ button.label }}
+                    </button>
+                    }
                 </div>
+                }
+                
                 @if (searchFn != null) {
                 <nz-divider nzType="vertical"></nz-divider>
                 <div nz-flex nzGap="small">
