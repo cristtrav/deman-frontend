@@ -1,0 +1,131 @@
+<form nz-form [formGroup]="form">
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Código
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24" 
+            nzErrorTip="El código es requerido">
+            <nz-input-group
+                [nzAddOnAfter]="editIdBtn"
+                nzSearch>
+                <nz-input-number
+                    formControlName="id"
+                    [nzDisabled]="idMode == 'auto'"
+                    [nzPlaceHolder]="idMode == 'auto' ? '(autogenerado)' : 'Ingresar'"
+                    nzPlaceHolder="200"
+                    style="width: 100%;"
+                    [nzMin]="1"
+                    [nzStep]="1">
+                </nz-input-number>
+                <ng-template #editIdBtn>
+                    <button
+                        nz-button
+                        [nzType]="idMode == 'auto' ? 'default' : 'primary'"
+                        (click)="switchIdMode()"
+                        nzSearch>
+                        <nz-icon nzType="edit"></nz-icon>
+                    </button>
+                </ng-template>
+            </nz-input-group>
+            
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Descripción
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24"
+            nzErrorTip="La descripción es requerida. Max. 100 carácteres">
+            <input
+                formControlName="descripcion"
+                nz-input 
+                placeholder="Remera"/>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Precio
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24"
+            nzErrorTip="El precio es requerido">
+            <nz-input-number
+                formControlName="precio"
+                style="width: 100%;"
+                nzPlaceHolder="250.000"
+                [nzMin]="0"
+                [nzStep]="1">
+                <span nzInputAddonBefore>Gs.</span>
+            </nz-input-number>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Marca
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24"
+            nzErrorTip="La marca es requerida">
+            <nz-select
+                formControlName="idmarca"
+                nzPlaceHolder="Seleccionar..."
+                [nzLoading]="loadingMarcas" 
+                nzShowSearch
+                nzAllowClear>
+                @for (marca of marcas; track marca.id) {
+                <nz-option [nzValue]="marca.id" [nzLabel]="marca.descripcion"></nz-option>    
+                }
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Categoría
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24"
+            nzErrorTip="La categoría es requerida">
+            <nz-select
+                formControlName="idcategoria"
+                nzPlaceHolder="Seleccionar..."
+                nzShowSearch
+                nzAllowClear>
+                @for (categoria of categorias; track categoria.id) {
+                    <nz-option [nzValue]="categoria.id" [nzLabel]="categoria.descripcion"></nz-option>
+                }
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Tipo
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24"
+            nzErrorTip="El tipo es requerido">
+            <nz-select
+                formControlName="idtipo"
+                nzPlaceHolder="Seleccionar..."
+                [nzLoading]="loadingTipos"
+                nzShowSearch
+                nzAllowClear>
+                @for (tipo of tipos; track tipo.id) {
+                <nz-option [nzValue]="tipo.id" [nzLabel]="tipo.descripcion"></nz-option>
+                }
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            U. de medida
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24"
+            nzErrorTip="La unidad de medida es requerida">
+            <nz-select
+                formControlName="idunidadMedida"
+                nzPlaceHolder="Seleccionar..."
+                nzAllowClear>
+                @for (unidadMedida of unidadesMedidas; track unidadMedida.id) {
+                    <nz-option [nzValue]="unidadMedida.id" [nzLabel]="unidadMedida.descripcion.plural"></nz-option>
+                }
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+<ng-template #alert></ng-template>

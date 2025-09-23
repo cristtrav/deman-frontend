@@ -11,7 +11,12 @@ export const routes: Routes = [
             {
                 path: 'marcas',
                 loadComponent: () => import('./feature/marca/presentation/page/marcas/marcas.page').then(m => m.MarcasPage),
-                data: { breadcrumb: 'Marcas'}
+                data: { breadcrumb: 'Marcas' }
+            },
+            {
+                path: 'productos',
+                loadComponent: () => import('./feature/producto/presentation/page/productos-page/productos-page').then(m => m.ProductosPage),
+                data: { breadcrumb: 'Productos' }
             }
         ]
     }

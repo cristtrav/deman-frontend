@@ -4,10 +4,18 @@ export interface ApiResponseDTO<T = any> {
     message?: string
     data?: T
     error?: ErrorData
+    pagination?: PaginationData
 }
 
 export interface ErrorData {
     code: string
     statusCode: number
     detail?: any
+}
+
+export interface PaginationData {
+    total: number,
+    page: number,
+    pageSize: number,
+    totalPages: number
 }
