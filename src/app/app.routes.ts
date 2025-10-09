@@ -12,6 +12,11 @@ export const routes: Routes = [
                 path: 'marcas',
                 loadComponent: () => import('./feature/marca/presentation/page/marcas/marcas.page').then(m => m.MarcasPage),
                 data: { breadcrumb: 'Marcas'}
+            },
+            {
+                path: 'colores',
+                loadComponent: () => import('./feature/color/presentation/page/colores-page/colores-page').then(c => c.ColoresPage),
+                data: { breadcrumb: 'Colores'}
             }
         ]
     }
