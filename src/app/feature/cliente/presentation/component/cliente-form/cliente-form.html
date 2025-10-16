@@ -1,0 +1,48 @@
+<form nz-form [formGroup]="form">
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Código
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="El código es requerido.">
+            <nz-input-group [nzAddOnAfter]="mode == 'add' ? autoIdBtn : undefined" nzSearch>
+                <nz-input-number [nzDisabled]="idMode == 'auto'"
+                    [nzPlaceHolder]="idMode == 'auto' ? '(autogenerado)' : 'Ingresar'" style="width: 100%;" [nzMin]="1"
+                    formControlName="id">
+                </nz-input-number>
+                <ng-template #autoIdBtn>
+                    @if (mode == 'add') {
+                    <button nz-button [nzType]="idMode == 'auto' ? 'default' : 'primary'" (click)="switchIdMode()"
+                        nzSearch>
+                        <nz-icon nzType="edit"></nz-icon>
+                    </button>
+                    }
+                </ng-template>
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Razon Social
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="La Razon Social es requerida. Max. 100 carácteres.">
+            <input nz-input formControlName="razonSocial" placeholder="Ingresar" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Ruc
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input nz-input formControlName="ruc" placeholder="Ingresar" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Teléfono
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" >
+            <input nz-input formControlName="telefono" placeholder="Ingresar" />
+        </nz-form-control>
+    </nz-form-item>
+</form>
+<ng-template #notification></ng-template>
