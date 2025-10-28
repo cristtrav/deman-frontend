@@ -17,6 +17,21 @@ export const routes: Routes = [
                 path: 'productos',
                 loadComponent: () => import('./feature/producto/presentation/page/productos-page/productos-page').then(m => m.ProductosPage),
                 data: { breadcrumb: 'Productos' }
+            },
+            {
+                path: 'colores',
+                loadComponent: () => import('./feature/color/presentation/page/colores-page/colores-page').then(c => c.ColoresPage),
+                data: { breadcrumb: 'Colores'}
+            }, 
+            {
+                path: 'tipos',
+                loadComponent: () => import('./feature/tipo/presentation/page/tipos/tipos.page').then(t => t.TiposPage),
+                data: { breadcrumb: 'Tipos'}
+            },
+            {
+                path: 'clientes',
+                loadComponent: () => import('./feature/cliente/presentation/page/clientes-page/clientes-page').then(c => c.ClientesPage),
+                data: { breadcrumb: 'Clientes'}
             }
         ]
     }

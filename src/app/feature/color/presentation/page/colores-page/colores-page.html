@@ -1,0 +1,54 @@
+<core-feature-layout [title]="'Colores'" [toolbarButtons]="toolbarButtons" [searchFn]="buscar">
+    <nz-table #tabla nzSize="small" [nzData]="colores" [nzLoading]="isLoading">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Descripción</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (color of tabla.data; track color.id){
+            <tr>
+                <td> {{color.id}}</td>
+                <td> {{color.descripcion}}</td>
+                <td nz-flex nzGap="small"  nzJustify="center">
+                    <button nz-button nzType="primary" (click)="editColor(color)">
+                        <nz-icon nzType="edit"></nz-icon>
+                    </button>
+                    <button nz-button nzType="primary" nzDanger (click)="confirmDelete(color)">
+                        <nz-icon nzType="delete"></nz-icon>
+                    </button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </nz-table>
+</core-feature-layout>
+
+<nz-modal [(nzVisible)]="isModalFormVisible" (nzOnCancel)="hideModalForm()" [nzTitle]="modalTitle"
+    [nzContent]="modalContent" [nzFooter]="modalFooter">
+    <ng-template #modalTitle>
+        {{ formMode == 'add' ? 'Crear color' : 'Editar color' }}
+    </ng-template>
+    <ng-template #modalContent>
+        <color-form [(mode)]="formMode" [editingColor]="editingColor" (isSavingChange)="isSaving = $event"
+            (savedColor)="onSaved()">
+        </color-form>
+    </ng-template>
+    <ng-template #modalFooter>
+        <div nz-flex nzJustify="flex-end">
+            <button nz-button nzType="primary" [nzLoading]="isSaving" (click)="colorFormComp.save()">
+                <nz-icon nzType="save"></nz-icon>
+                {{ formMode == 'add' ? 'Registrar' : 'Editar' }}
+            </button>
+            <button nz-button nzType="default" (click)="colorFormComp.resetForm()">
+                <nz-icon nzType="clear"></nz-icon>
+                {{ formMode == 'add' ? 'Limpiar' : 'Nuevo' }}
+            </button>
+            <button nz-button nzType="default" (click)="hideModalForm()">
+                Cerrar
+            </button>
+        </div>
+    </ng-template>
+</nz-modal>

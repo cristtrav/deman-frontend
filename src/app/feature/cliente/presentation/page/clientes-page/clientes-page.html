@@ -1,0 +1,58 @@
+<core-feature-layout [title]="'Clientes'" [toolbarButtons]="toolbarButtons" [searchFn]="buscar">
+    <nz-table #tabla nzSize="small" [nzData]="clientes" [nzLoading]="isLoading">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Razón Social</th>
+                <th>Ruc</th>
+                <th>Teléfono</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (cliente of tabla.data; track cliente.id){
+            <tr>
+                <td> {{cliente.id}}</td>
+                <td> {{cliente.razonSocial}}</td>
+                <td> {{cliente.ruc}}</td>
+                <td> {{cliente.telefono}}</td>
+                <td nz-flex nzGap="small"  nzJustify="center">
+                    <button nz-button nzType="primary" (click)="editCliente(cliente)">
+                        <nz-icon nzType="edit"></nz-icon>
+                    </button>
+                    <button nz-button nzType="primary" nzDanger (click)="confirmDelete(cliente)">
+                        <nz-icon nzType="delete"></nz-icon>
+                    </button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </nz-table>
+</core-feature-layout>
+
+<nz-modal [(nzVisible)]="isModalFormVisible" (nzOnCancel)="hideModalForm()" [nzTitle]="modalTitle"
+    [nzContent]="modalContent" [nzFooter]="modalFooter">
+    <ng-template #modalTitle>
+        {{ formMode == 'add' ? 'Crear cliente' : 'Editar cliente' }}
+    </ng-template>
+    <ng-template #modalContent>
+        <cliente-form [(mode)]="formMode" [editingCliente]="editingCliente" (isSavingChange)="isSaving = $event"
+            (savedCliente)="onSaved()">
+        </cliente-form>
+    </ng-template>
+    <ng-template #modalFooter>
+        <div nz-flex nzJustify="flex-end">
+            <button nz-button nzType="primary" [nzLoading]="isSaving" (click)="clienteFormComp.save()">
+                <nz-icon nzType="save"></nz-icon>
+                {{ formMode == 'add' ? 'Registrar' : 'Editar' }}
+            </button>
+            <button nz-button nzType="default" (click)="clienteFormComp.resetForm()">
+                <nz-icon nzType="clear"></nz-icon>
+                {{ formMode == 'add' ? 'Limpiar' : 'Nuevo' }}
+            </button>
+            <button nz-button nzType="default" (click)="hideModalForm()">
+                Cerrar
+            </button>
+        </div>
+    </ng-template>
+</nz-modal>
