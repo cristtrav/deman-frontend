@@ -17,7 +17,18 @@ export const routes: Routes = [
                 path: 'productos',
                 loadComponent: () => import('./feature/producto/presentation/page/productos-page/productos-page').then(m => m.ProductosPage),
                 data: { breadcrumb: 'Productos' }
+            },
+            {
+                path: 'inventarios',
+                loadComponent: () => import('./feature/inventario/presentation/page/inventario/inventarios-page').then(m => m.InventariosPage),
+                data: { breadcrumb: 'Inventarios' },
+            },
+            {
+                path: 'inventarios/:id',
+                loadComponent: () => import('./feature/inventario/presentation/page/detalle-inventario-page/detalle-inventario-page').then(m => m.DetalleInventarioPage),
+                data: { breadcrumb: 'Detalle Inventario' },
             }
+            
         ]
     }
 ];

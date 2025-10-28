@@ -1,0 +1,98 @@
+<core-feature-layout
+    [type]="'master-detail'"
+    [title]="'Inventario'"
+    [subtitle]="idinventario == 'nuevo' ? 'Nuevo' : 'Editar'"
+    [bagroundType]="'transparent'">
+    <div detail>
+        <div nz-row [nzGutter]="[8,8]">
+            <div nz-col nzSpan="24">
+                <button nz-button nzType="primary" (click)="abrirModalProductos()">
+                    <nz-icon nzType="plus"></nz-icon>
+                    Agregar
+                </button>
+            </div>
+            <div nz-col nzSpan="24">
+                <nz-table #tabla nzSize="small" nzTemplateMode>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Variante</th>
+                            <th>Cant.</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cafetera</td>
+                            <td>Tamanio: Por defecto | Color: Sin color</td>
+                            <td>1 ud</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+        </div>
+    </div>
+    <div header style="background-color: white; padding: 20px 20px;">
+        <form nz-form>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24">Código</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-input-number style="width: 100%;"></nz-input-number>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24">Fecha</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24">
+                    <nz-date-picker nzPlaceHolder="Seleccionar..." style="width: 100%;"></nz-date-picker>
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+</core-feature-layout>
+<nz-modal
+    [(nzVisible)]="isModalProductoVisible"
+    [nzContent]="content"
+    (nzOnCancel)="cerrarModalProductos()"
+    [nzWidth]="750"
+    nzTitle="Agregar producto" >
+    <ng-template #content>
+        <div nz-row [nzGutter]="[8,8]">
+            <div nz-col nzSpan="24">
+                <nz-input-group nzSuffixIcon="search">
+                    <input nz-input placeholder="Buscar...">
+                </nz-input-group>
+            </div>
+            <div nz-col nzSpan="24">
+                <nz-table #tablaProductos nzTemplateMode nzSize="small">
+                    <thead>
+                        <tr>
+                            <th>Cód.</th>
+                            <th>Producto</th>
+                            <th>Tamaño</th>
+                            <th>Color</th>
+                            <th>Desc.</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (pv of productosVariantes; track pv.id) {
+                            <tr>
+                            <td>{{ pv.id.idproducto }}</td>
+                            <td>{{ pv.producto.descripcion }}</td>
+                            <td>{{ pv.variante.tamanio.descripcion }}</td>
+                            <td>{{ pv.variante.color.descripcion }}</td>
+                            <td>{{ pv.variante.descripcion }}</td>
+                            <td>
+                                <button nz-button nzType="primary">
+                                    <nz-icon nzType="plus"></nz-icon>
+                                </button>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </nz-table>
+            </div>
+        </div>
+    </ng-template>
+</nz-modal>

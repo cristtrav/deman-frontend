@@ -1,0 +1,5 @@
+.boton-flotante-local {
+  position: absolute !important; /* anula el position: fixed del componente */
+  top: -5px;
+  right: 10px;
+}

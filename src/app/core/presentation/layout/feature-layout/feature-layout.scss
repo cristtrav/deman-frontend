@@ -1,9 +1,17 @@
 .title {
     padding: 0px;
     margin: 0px;
+    font-weight: bold;
+    font-size: 1.4rem;
 }
-.inner-content {
-    //padding: 10px;
+.subtitle {
+    padding: 0px;
+    margin: 0px;
+    //font-weight: bold;
+    font-size: 1.2rem; 
+}
+
+.inner-content-bg {
     background-color: white;
 }
 .filter-button {
