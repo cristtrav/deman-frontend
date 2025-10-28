@@ -19,6 +19,21 @@ export const routes: Routes = [
                 data: { breadcrumb: 'Productos' }
             },
             {
+                path: 'colores',
+                loadComponent: () => import('./feature/color/presentation/page/colores-page/colores-page').then(c => c.ColoresPage),
+                data: { breadcrumb: 'Colores'}
+            }, 
+            {
+                path: 'tipos',
+                loadComponent: () => import('./feature/tipo/presentation/page/tipos/tipos.page').then(t => t.TiposPage),
+                data: { breadcrumb: 'Tipos'}
+            },
+            {
+                path: 'clientes',
+                loadComponent: () => import('./feature/cliente/presentation/page/clientes-page/clientes-page').then(c => c.ClientesPage),
+                data: { breadcrumb: 'Clientes'}
+            },
+            {
                 path: 'inventarios',
                 loadComponent: () => import('./feature/inventario/presentation/page/inventario/inventarios-page').then(m => m.InventariosPage),
                 data: { breadcrumb: 'Inventarios' },
