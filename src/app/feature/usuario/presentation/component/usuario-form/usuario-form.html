@@ -1,0 +1,68 @@
+<form nz-form [formGroup]="form">
+    @if (mode === 'add' || mode === 'edit'){
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Código
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="El código es requerido.">
+            <nz-input-group [nzAddOnAfter]="mode == 'add' ? autoIdBtn : undefined" nzSearch>
+                <nz-input-number [nzDisabled]="idMode == 'auto'"
+                    [nzPlaceHolder]="idMode == 'auto' ? '(autogenerado)' : 'Ingresar'" style="width: 100%;" [nzMin]="1"
+                    formControlName="id">
+                </nz-input-number>
+                <ng-template #autoIdBtn>
+                    @if (mode == 'add') {
+                    <button nz-button [nzType]="idMode == 'auto' ? 'default' : 'primary'" (click)="switchIdMode()"
+                        nzSearch>
+                        <nz-icon nzType="edit"></nz-icon>
+                    </button>
+                    }
+                </ng-template>
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Nombres
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="El nombre es requerido. Max. 50 carácteres.">
+            <input nz-input formControlName="nombres" placeholder="Ingresar" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Apellidos
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="El apellido es requerido. Max. 50 carácteres.">
+            <input nz-input formControlName="apellidos" placeholder="Ingresar" />
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            C.I N°
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="El numero de cédula es requerido. Max. 50 carácteres.">
+            <input nz-input formControlName="ci" placeholder="Ingresar" />
+        </nz-form-control>
+    </nz-form-item>
+    }
+   @if (mode === 'add'){
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Contraseña
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="La contraseña es requerida. Max. 50 carácteres.">
+            <nz-input-group [nzSuffix]="suffixTemplate">
+                <input nz-input [type]="passwordVisible ? 'text' : 'password'" placeholder="Contraseña"
+                    formControlName="password" />
+            </nz-input-group>
+            <ng-template #suffixTemplate>
+                <i nz-icon [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+                    (click)="passwordVisible = !passwordVisible"></i>
+            </ng-template>
+        </nz-form-control>
+    </nz-form-item>
+    }
+
+</form>
+<ng-template #notification></ng-template>

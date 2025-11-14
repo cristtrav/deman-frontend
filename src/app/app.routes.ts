@@ -27,6 +27,11 @@ export const routes: Routes = [
                 path: 'clientes',
                 loadComponent: () => import('./feature/cliente/presentation/page/clientes-page/clientes-page').then(c => c.ClientesPage),
                 data: { breadcrumb: 'Clientes'}
+            },
+            {
+                path: 'usuarios',
+                loadComponent: () => import('./feature/usuario/presentation/page/usuarios/usuarios.page').then(u => u.UsuariosPage),
+                data: { breadcrumb: 'Usuarios'}
             }
         ]
     }
