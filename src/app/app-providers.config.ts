@@ -3,13 +3,15 @@ import marcaProviders from "./feature/marca/infrastructure/module/marca.provider
 import colorProviders from "./feature/color/infrastructure/module/color.providers";
 import tipoProviders from "./feature/tipo/infrastructure/module/tipo.providers";
 import clienteProviders from "./feature/cliente/infrastructure/module/cliente.provider";
+import usuarioProviders from "./feature/usuario/infrastructure/module/usuario.providers";
 import productoProviders from "./feature/producto/infrastructure/module/producto.providers";
 
 const appProviders: Provider[] = [
     ...marcaProviders, 
     ...colorProviders, 
     ...tipoProviders, 
-    ...clienteProviders,
+    ...clienteProviders, 
+    ...usuarioProviders,
     ...productoProviders
 ]
     
