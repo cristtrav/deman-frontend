@@ -2,9 +2,22 @@
 
     <div nz-flex nzGap="middle" nzJustify="space-between" nzAlign="center">
         <div>
-            @if (title) {
-                <h3 nz-typography class="flex-item title">{{ title }}</h3>
-            }
+            <nz-breadcrumb [nzSeparator]="separator" class="flex-item">
+                <ng-template #separator>
+                    <nz-icon nzType="arrow-right"></nz-icon>
+                </ng-template>
+                @if (title) {
+                <nz-breadcrumb-item>
+                    <span nz-typography class="title">{{ title }}</span>        
+                </nz-breadcrumb-item>
+                }
+                @if(subtitle){
+                <nz-breadcrumb-item>
+                    <span nz-typography class="subtitle" nzType="secondary">{{ subtitle }}</span>
+                </nz-breadcrumb-item>
+                }
+            </nz-breadcrumb>
+            
         </div>
         <div>
             <div nz-flex nzGap="small" nzAlign="center">
@@ -49,9 +62,24 @@
         </div>
     </div>
     
-    <div class="inner-content">
-        <ng-content></ng-content>
-    </div>
-    
+    @if(type == 'default') {
+        <div class="inner-content-bg" [class]="{'inner-content-bg': bagroundType == 'color'}">
+            <ng-content></ng-content>
+        </div>
+    } 
+    @else {
+        <div nz-row [nzGutter]="[16,16]">
+            <div nz-col nzSpan="16">
+                <div [class]="{'inner-content-bg': bagroundType == 'color'}">
+                    <ng-content select="[detail]"></ng-content>
+                </div>
+            </div>
+            <div nz-col nzSpan="8">
+                <div [class]="{'inner-content-bg': bagroundType == 'color'}">
+                    <ng-content select="[header]"></ng-content>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 

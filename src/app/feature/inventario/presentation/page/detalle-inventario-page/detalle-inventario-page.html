@@ -1,0 +1,171 @@
+<core-feature-layout
+    [type]="'master-detail'"
+    [title]="'Inventario'"
+    [subtitle]="idinventario == 'nuevo' ? 'Nuevo' : 'Editar'"
+    [bagroundType]="'transparent'">
+    <div detail>
+        <div nz-row [nzGutter]="[8,8]">
+            <div nz-col nzSpan="24">
+                <button nz-button nzType="primary" (click)="openModalProductos()">
+                    <nz-icon nzType="plus"></nz-icon>
+                    Producto
+                </button>
+            </div>
+            <div nz-col nzSpan="24">
+                <nz-table #tabla nzSize="small"
+                    [nzData]="detallesInventario"
+                    [nzLoading]="isInventarioLoading">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Variante</th>
+                            <th>Cant.</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (detalle of tabla.data; track $index; let idx = $index) {
+                            <tr class="editable-row">
+                                <td>{{ detalle.producto.descripcion }}</td>
+                                <td>Tamanio: {{ detalle.variante.tamanio.descripcion}} | Color: {{ detalle.variante.color.descripcion }}</td>
+                                <td>
+                                    <span class="editable-cell" [hidden]="editIndex === idx" (click)="startEdit(idx, inputCantidad)">
+                                        {{ detalle.cantidad | number }} {{ detalle.producto.unidadMedida | unidadMedidaAbr: detalle.cantidad}}
+                                    </span>
+                                    <nz-input-number
+                                        #inputCantidad
+                                        [nzMin]="0"
+                                        [hidden]="editIndex !== idx"
+                                        [(ngModel)]="detalle.cantidad"
+                                        (nzBlur)="finishEdit()"
+                                        (keydown.enter)="finishEdit()"
+                                        (keydown.escape)="cancelEdit()"
+                                        style="max-width: 10em;">
+                                        <span nzInputAddonAfter>
+                                            {{detalle.producto.unidadMedida | unidadMedidaAbr:detalle.cantidad }}
+                                        </span>
+                                    </nz-input-number>
+                                </td>
+                                <td nz-flex>
+                                    <button
+                                        nz-button
+                                        nzType="primary"
+                                        nzDanger
+                                        (click)="confirmRemoveDetalle(idx, detalle)">
+                                        <nz-icon nzType="delete"></nz-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </nz-table>
+            </div>
+        </div>
+    </div>
+    <div header style="background-color: white; padding: 20px 20px;">
+        <nz-spin [nzSpinning]="isInventarioLoading">
+            <form nz-form [formGroup]="formCabecera">
+                <nz-form-item>
+                    <nz-form-label
+                        [nzSm]="7" [nzXs]="24"
+                        [nzRequired]="idinventario != 'nuevo'">
+                        Código
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24">
+                        <nz-input-number
+                            style="width: 100%;"
+                            formControlName="id"
+                            nzDisabled
+                            [nzPlaceHolder]="idinventario == 'nuevo' ? '(autogenerado)' : ''">
+                        </nz-input-number>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label
+                        [nzSm]="7" [nzXs]="24"
+                        nzRequired>
+                        Fecha
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24" nzErrorTip="Ingrese la fecha">
+                        <nz-date-picker
+                            nzFormat="dd/MM/yyyy"
+                            nzPlaceHolder="Seleccionar..."
+                            style="width: 100%;"
+                            formControlName="fecha">
+                        </nz-date-picker>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item>
+                    <nz-form-label [nzSm]="7" [nzXs]="24">
+                        Observación
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="15" [nzXs]="24">
+                        <input nz-input formControlName="observacion">
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-col style="text-align: right;" [nzSm]="22" [nzXs]="24">
+                    <button
+                        nz-button
+                        nzType="primary"
+                        [nzLoading]="isSaving"
+                        (click)="save()">
+                        <nz-icon nzType="save"></nz-icon>
+                        {{ idinventario == 'nuevo' ? 'Registrar' : 'Editar' }}
+                    </button>
+                </nz-col>
+            </form>
+        </nz-spin>
+    </div>
+</core-feature-layout>
+<nz-modal
+    [(nzVisible)]="isModalProductoVisible"
+    [nzContent]="modalProductoContent"
+    [nzFooter]="modalProductoFooter"
+    (nzOnCancel)="closeModalProductos()"
+    [nzWidth]="750"
+    nzTitle="Agregar producto" >
+    <ng-template #modalProductoContent>
+        <div nz-row [nzGutter]="[8,8]">
+            <div nz-col nzSpan="24">
+                <nz-input-group nzSuffixIcon="search">
+                    <input nz-input placeholder="Buscar..." [(ngModel)]="busquedaProducto" (ngModelChange)="searchProductosVariantes()">
+                </nz-input-group>
+            </div>
+            <div nz-col nzSpan="24">
+                <nz-table #tablaProductosVariantes nzSize="small"
+                    [nzData]="productosVariantes"
+                    [nzLoading]="isProductosVariantesLoading">
+                    <thead>
+                        <tr>
+                            <th>Cód.</th>
+                            <th>Producto</th>
+                            <th>Tamaño</th>
+                            <th>Color</th>
+                            <th>Desc.</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (pv of tablaProductosVariantes.data; track pv.id) {
+                            <tr>
+                            <td>{{ pv.id.idproducto }}</td>
+                            <td>{{ pv.producto.descripcion }}</td>
+                            <td>{{ pv.variante.tamanio.descripcion }}</td>
+                            <td>{{ pv.variante.color.descripcion }}</td>
+                            <td>{{ pv.variante.descripcion }}</td>
+                            <td>
+                                <button nz-button nzType="primary" (click)="addDetalle(pv)">
+                                    <nz-icon nzType="plus"></nz-icon>
+                                </button>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </nz-table>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #modalProductoFooter>
+        <button nz-button (click)="closeModalProductos()">Cerrar</button>
+    </ng-template>
+</nz-modal>

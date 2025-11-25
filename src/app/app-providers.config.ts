@@ -5,6 +5,7 @@ import tipoProviders from "./feature/tipo/infrastructure/module/tipo.providers";
 import clienteProviders from "./feature/cliente/infrastructure/module/cliente.provider";
 import usuarioProviders from "./feature/usuario/infrastructure/module/usuario.providers";
 import productoProviders from "./feature/producto/infrastructure/module/producto.providers";
+import inventarioProviders from "./feature/inventario/infrastructure/module/inventario.provider";
 
 const appProviders: Provider[] = [
     ...marcaProviders, 
@@ -12,7 +13,8 @@ const appProviders: Provider[] = [
     ...tipoProviders, 
     ...clienteProviders, 
     ...usuarioProviders,
-    ...productoProviders
+    ...productoProviders,
+    ...inventarioProviders
 ]
     
 export default appProviders;

@@ -1,0 +1,87 @@
+<core-feature-layout
+    [title]="'Inventarios'"
+    [toolbarButtons]="toolbarButtons"> 
+    <nz-table #tabla nzSize="small"
+        [nzData]="inventarios"
+        [nzLoading]="isLoading">
+        <thead>
+            <tr>
+                <th nzWidth="50px"></th>
+                <th>Código</th>
+                <th>Fecha</th>
+                <th>Observación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (inventario of tabla.data; track inventario.id) {
+            <tr>
+                <td [nzExpand]="expandSet.has(inventario.id)" (nzExpandChange)="onExpandChange(inventario.id, $event)"></td>
+                <td>{{ inventario.id }}</td>
+                <td>{{ inventario.fecha | date:'dd/MM/yyyy'}}</td>
+                <td>
+                    @if(inventario.observacion){
+                        {{ inventario.observacion }}
+                    }@else {
+                        <span nz-typography nzType="secondary">(sin observación)</span>
+                    }
+                </td>
+                <td nz-flex nzGap="small">
+                    <button nz-button nzType="primary" [routerLink]="[inventario.id]">
+                        <nz-icon nzType="edit"></nz-icon>
+                    </button>
+                    <button nz-button nzType="primary" nzDanger (click)="confirmDelete(inventario)">
+                        <nz-icon nzType="delete"></nz-icon>
+                    </button>
+                </td>
+            </tr>
+            <tr [nzExpand]="expandSet.has(inventario.id)">
+                <nz-table #tablaDetalle
+                    nzSize="small"
+                    nzSimple
+                    [nzData]="inventario.detalles">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Variante</th>
+                            <th>Cantidad</th>
+                            <th>Cant. Anterior</th>
+                            <th>Diferencia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (detalle of tablaDetalle.data; track detalle.id) {
+                            <tr>
+                                <td>{{ detalle.producto.descripcion }}</td>
+                                <td>
+                                    @if(detalle.variante.descripcion){
+                                        <span>{{ detalle.variante.descripcion }} | </span>
+                                    }
+                                    <span>
+                                        Tamaño: {{ detalle.variante.tamanio.descripcion }} | 
+                                        Color: {{ detalle.variante.color.descripcion }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {{ detalle.cantidad | number }}
+                                    {{ detalle.producto.unidadMedida | unidadMedidaAbr:detalle.cantidad }}
+                                </td>
+                                <td>
+                                    {{ (detalle.cantidad - detalle.diferencia) | number}}
+                                    {{  detalle.producto.unidadMedida | unidadMedidaAbr:detalle.cantidad }}
+                                </td>
+                                <td>
+                                    <nz-tag [nzColor]="detalle.diferencia == 0 ? 'green' : detalle.diferencia < 0 ? 'red' : 'orange'">
+                                        {{detalle.diferencia > 0 ? '+' : ''}}{{ detalle.diferencia | number}}
+                                        {{ detalle.producto.unidadMedida | unidadMedidaAbr:detalle.cantidad }}
+                                    </nz-tag>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </nz-table>
+            </tr>
+            }
+        </tbody>
+    </nz-table>
+</core-feature-layout>

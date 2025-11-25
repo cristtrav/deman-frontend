@@ -8,6 +8,9 @@ import icons from './icons';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { FormsModule } from '@angular/forms';
 import { ToolbarButton } from '@core/presentation/model/toolbar-button.model';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzFormModule } from "ng-zorro-antd/form";
+import { NzGridModule } from 'ng-zorro-antd/grid';
 
 @Component({
   selector: 'core-feature-layout',
@@ -18,8 +21,11 @@ import { ToolbarButton } from '@core/presentation/model/toolbar-button.model';
     NzInputModule,
     NzIconModule,
     NzDividerModule,
-    FormsModule
-  ],
+    NzBreadCrumbModule,
+    NzGridModule,
+    FormsModule,
+    NzFormModule
+],
   providers: [provideNzIconsPatch(icons)],
   templateUrl: './feature-layout.html',
   styleUrl: './feature-layout.scss'
@@ -29,7 +35,13 @@ export class FeatureLayout {
   @Input()
   title!: string;
   @Input()
+  subtitle!: string;
+  @Input()
   toolbarButtons!: ToolbarButton[]
+  @Input()
+  type: 'default' | 'master-detail' = 'default';
+  @Input()
+  bagroundType: 'color' | 'transparent' = 'color';
   search: string = '';
   searchTimeoutId!: number;
 

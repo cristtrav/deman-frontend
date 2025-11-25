@@ -37,7 +37,18 @@ export const routes: Routes = [
                 path: 'usuarios',
                 loadComponent: () => import('./feature/usuario/presentation/page/usuarios/usuarios.page').then(u => u.UsuariosPage),
                 data: { breadcrumb: 'Usuarios'}
+            },
+            {
+                path: 'inventarios',
+                loadComponent: () => import('./feature/inventario/presentation/page/inventario/inventarios-page').then(m => m.InventariosPage),
+                data: { breadcrumb: 'Inventarios' },
+            },
+            {
+                path: 'inventarios/:id',
+                loadComponent: () => import('./feature/inventario/presentation/page/detalle-inventario-page/detalle-inventario-page').then(m => m.DetalleInventarioPage),
+                data: { breadcrumb: 'Detalle Inventario' },
             }
+            
         ]
     }
 ];

@@ -6,20 +6,23 @@
                 <nz-icon nzType="home" />
                 <span>Inicio</span>
             </li>
+            <li nz-submenu nzTitle="Clientes" nzIcon="team">
+                <ul>
+                    <li nz-menu-item routerLink="/app/clientes" nzMatchRouter>Clientes</li>
+                </ul>
+            </li>
             <li nz-submenu nzTitle="Productos" nzIcon="product">
                 <ul>
                     <li nz-menu-item routerLink="/app/marcas" nzMatchRouter>Marcas</li>
                     <li nz-menu-item routerLink="/app/colores" nzMatchRouter>Colores</li>
                     <li nz-menu-item routerLink="/app/tipos" nzMatchRouter>Tipos</li>
                     <li nz-menu-item routerLink="/app/clientes" nzMatchRouter>Clientes</li>
-                </ul>
-                <ul>
                     <li nz-menu-item routerLink="/app/productos" nzMatchRouter>Productos</li>
                 </ul>
             </li>
-             <li nz-submenu nzTitle="Usuarios" nzIcon="user">
+            <li nz-submenu nzTitle="Inventario" nzIcon="team">
                 <ul>
-                    <li nz-menu-item routerLink="/app/usuarios" nzMatchRouter>Usuarios</li>
+                    <li nz-menu-item routerLink="/app/inventarios" nzMatchRouter>Inventario</li>
                 </ul>
             </li>
             <!--<li nz-submenu nzTitle="Team" nzIcon="team">
