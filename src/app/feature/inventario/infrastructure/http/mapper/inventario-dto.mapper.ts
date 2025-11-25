@@ -6,7 +6,8 @@ export class InventarioDTOMapper {
     static toModel(inventarioDto: InventarioDTO): Inventario {
         return {
             id: inventarioDto.id,
-            fecha: inventarioDto.fecha,
+            fecha: new Date(`${inventarioDto.fecha}T00:00:00`),
+            observacion: inventarioDto.observacion,
             detalles: inventarioDto.detalles.map(detalleDto => DetalleInventarioDTOMapper.toModel(detalleDto))
         }
     }

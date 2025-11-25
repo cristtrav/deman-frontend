@@ -9,6 +9,7 @@
                 <th nzWidth="50px"></th>
                 <th>Código</th>
                 <th>Fecha</th>
+                <th>Observación</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -18,11 +19,18 @@
                 <td [nzExpand]="expandSet.has(inventario.id)" (nzExpandChange)="onExpandChange(inventario.id, $event)"></td>
                 <td>{{ inventario.id }}</td>
                 <td>{{ inventario.fecha | date:'dd/MM/yyyy'}}</td>
+                <td>
+                    @if(inventario.observacion){
+                        {{ inventario.observacion }}
+                    }@else {
+                        <span nz-typography nzType="secondary">(sin observación)</span>
+                    }
+                </td>
                 <td nz-flex nzGap="small">
-                    <button nz-button nzType="primary">
+                    <button nz-button nzType="primary" [routerLink]="[inventario.id]">
                         <nz-icon nzType="edit"></nz-icon>
                     </button>
-                    <button nz-button nzType="primary" nzDanger>
+                    <button nz-button nzType="primary" nzDanger (click)="confirmDelete(inventario)">
                         <nz-icon nzType="delete"></nz-icon>
                     </button>
                 </td>
@@ -56,28 +64,16 @@
                                 </td>
                                 <td>
                                     {{ detalle.cantidad | number }}
-                                    {{ 
-                                        detalle.cantidad == 1 ?
-                                        detalle.producto.unidadMedida.abreviatura.singular : 
-                                        detalle.producto.unidadMedida.abreviatura.plural
-                                    }}
+                                    {{ detalle.producto.unidadMedida | unidadMedidaAbr:detalle.cantidad }}
                                 </td>
                                 <td>
                                     {{ (detalle.cantidad - detalle.diferencia) | number}}
-                                    {{ 
-                                        detalle.cantidad == 1 ?
-                                        detalle.producto.unidadMedida.abreviatura.singular : 
-                                        detalle.producto.unidadMedida.abreviatura.plural
-                                    }}
+                                    {{  detalle.producto.unidadMedida | unidadMedidaAbr:detalle.cantidad }}
                                 </td>
                                 <td>
                                     <nz-tag [nzColor]="detalle.diferencia == 0 ? 'green' : detalle.diferencia < 0 ? 'red' : 'orange'">
                                         {{detalle.diferencia > 0 ? '+' : ''}}{{ detalle.diferencia | number}}
-                                        {{ 
-                                            detalle.cantidad == 1 ?
-                                            detalle.producto.unidadMedida.abreviatura.singular : 
-                                            detalle.producto.unidadMedida.abreviatura.plural
-                                        }}
+                                        {{ detalle.producto.unidadMedida | unidadMedidaAbr:detalle.cantidad }}
                                     </nz-tag>
                                 </td>
                             </tr>

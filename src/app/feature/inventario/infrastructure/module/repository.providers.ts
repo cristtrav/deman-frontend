@@ -4,6 +4,8 @@ import { InventarioHttpRepository } from "../http/repository/inventario.http-rep
 import { HttpClient } from "@angular/common/http";
 import { ProductoRepository } from "../../application/port/producto.repository";
 import { ProductoHttpRepository } from "../http/repository/producto.http-repository";
+import { ProductoVarianteRepository } from "../../application/port/producto-variante.repository";
+import { ProductoVarianteHttpRepository } from "../http/repository/producto-variante.http-repository";
 
 const repositoryProviders: Provider[] = [
     {
@@ -14,6 +16,11 @@ const repositoryProviders: Provider[] = [
     {
         provide: ProductoRepository,
         useClass: ProductoHttpRepository,
+        deps: [ HttpClient ]
+    },
+    {
+        provide: ProductoVarianteRepository,
+        useClass: ProductoVarianteHttpRepository,
         deps: [ HttpClient ]
     }
 ]
