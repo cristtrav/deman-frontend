@@ -47,6 +47,11 @@ export const routes: Routes = [
                 path: 'inventarios/:id',
                 loadComponent: () => import('./feature/inventario/presentation/page/detalle-inventario-page/detalle-inventario-page').then(m => m.DetalleInventarioPage),
                 data: { breadcrumb: 'Detalle Inventario' },
+            },
+            {
+                path: 'pedidos',
+                loadComponent: () => import('./feature/pedido/presentation/page/pedidos-page/pedidos-page').then(m => m.PedidosPage),
+                data: { breadcrumb: 'Pedidos' },
             }
             
         ]

@@ -1,0 +1,32 @@
+<core-feature-layout 
+    [title]="'Pedidos'"
+    [toolbarButtons]="toolbarButtons">
+    <nz-table #tabla [nzData]="pedidos" nzSize="small">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Fecha Pedido</th>
+                <th>Fecha Entrega</th>
+                <th>Fecha Entregado</th>
+                <th>Entregado</th>
+                <th>Descripción</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (pedido of tabla.data; track pedido.id) {
+            <tr>
+                <td>{{ pedido.id }}</td>
+                <td>{{ pedido.cliente.razonSocial }}</td>                
+                <td>{{ pedido.fechaConfirmacion }}</td>
+                <td>{{ pedido.fechaEntrega }}</td>
+                <td>{{ pedido.fechaEntregado }}</td>
+                <td>{{ pedido.entregado }}</td>
+                <td>{{ pedido.descripcion }}</td>
+                <td>{{ pedido.total }}</td>
+            </tr>
+            }
+        </tbody>
+    </nz-table>
+</core-feature-layout>
