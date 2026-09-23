@@ -1,32 +1,94 @@
 <core-feature-layout 
     [title]="'Pedidos'"
     [toolbarButtons]="toolbarButtons">
-    <nz-table #tabla [nzData]="pedidos" nzSize="small">
+    <nz-table #tabla
+        [nzData]="pedidoFacade.itemList()"
+        [nzLoading]="pedidoFacade.loading()"
+        [nzPageSize]="pedidoFacade.pageSize()"
+        [nzPageIndex]="pedidoFacade.page()"
+        [nzTotal]="pedidoFacade.totalItems()"
+        [nzFrontPagination]="false"
+        (nzQueryParams)="onPaginationChange($event)"
+        nzSize="small">
         <thead>
             <tr>
-                <th>ID</th>
+                <th nzWidth="60px"></th>
+                <th [nzColumnKey]="'id'" [nzSortFn]="true" [nzSortOrder]="'descend'">ID</th>
                 <th>Cliente</th>
-                <th>Fecha Pedido</th>
-                <th>Fecha Entrega</th>
-                <th>Fecha Entregado</th>
-                <th>Entregado</th>
-                <th>Descripción</th>
+                <th>F. Pedido</th>
+                <th>F. Entrega</th>
+                <th>Entregado el</th>
                 <th>Total</th>
+                <th>Saldo</th>
+                <th>Acc.</th>
             </tr>
         </thead>
         <tbody>
             @for (pedido of tabla.data; track pedido.id) {
             <tr>
+                <td [nzExpand]="isExpanded(pedido.id)()" (nzExpandChange)="onExpandChange(pedido.id, $event)"></td>
                 <td>{{ pedido.id }}</td>
                 <td>{{ pedido.cliente.razonSocial }}</td>                
-                <td>{{ pedido.fechaConfirmacion }}</td>
-                <td>{{ pedido.fechaEntrega }}</td>
-                <td>{{ pedido.fechaEntregado }}</td>
-                <td>{{ pedido.entregado }}</td>
-                <td>{{ pedido.descripcion }}</td>
-                <td>{{ pedido.total }}</td>
+                <td>{{ pedido.fechaPedido | date:'dd/MMM/yyyy' }}</td>
+                <td>{{ pedido.fechaEntrega | date:'dd/MMM/yyyy'}}</td>
+                <td>
+                    @if (pedido.fechaEntregado == null) {
+                        -
+                    } @else {
+                        {{ pedido.fechaEntregado | date:'dd/MMM/yyyy' }}
+                    }
+                </td>                
+                <td nzAlign="right">Gs.{{ pedido.total | number }}</td>
+                <td nzAlign="right">Gs. 0</td>
+                <td nz-flex nzGap="small" nzJustify="center">
+                    <button nz-button nzType="primary" (click)="editPedido(pedido)">
+                        <nz-icon nzType="edit" nzTheme="outline"></nz-icon>
+                    </button>
+                    <button nz-button nzType="primary" nzDanger (click)="confirmDelete(pedido)">
+                        <nz-icon nzType="delete" nzTheme="outline"></nz-icon>
+                    </button>
+                </td>
+            </tr>
+            <tr [nzExpand]="isExpanded(pedido.id)()">
+                <td [attr.colspan]="8">
+                    <p class="descripcion">{{ pedido.descripcion }}</p>
+                </td>
             </tr>
             }
         </tbody>
     </nz-table>
 </core-feature-layout>
+
+<nz-modal 
+    [(nzVisible)]="isModalFormVisible"
+    [nzTitle]="modalTitle"
+    [nzContent]="modalContent"
+    [nzFooter]="modalFooter"
+    (nzOnCancel)="hideModal()">
+</nz-modal>
+<ng-template #modalTitle>
+    {{ formMode() == 'add' ? 'Crear' : 'Editar'}} Pedido
+</ng-template>
+<ng-template #modalContent>
+    <pedido-form
+        (reload)="reload()"
+        [pedidoEdit]="pedidoEdit()"
+        [mode]="formMode()">
+    </pedido-form>
+</ng-template>
+<ng-template #modalFooter>
+    <div nz-flex nzGap="small" nzJustify="end">
+        <button
+            nz-button
+            nzType="primary"
+            [nzLoading]="pedidoFormView().isSaving()"
+            (click)="pedidoFormView().save()">
+            <nz-icon nzType="save"></nz-icon>
+            {{ pedidoFormView().mode() == 'edit' ? 'Editar' : 'Registrar'}}
+        </button>
+        <button nz-button nzType="default" (click)="hideModal()">
+            <nz-icon nzType="close"></nz-icon>
+            Cerrar
+        </button>
+    </div>
+</ng-template>

@@ -1,0 +1,117 @@
+<form nz-form [formGroup]="form">
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Código
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24" 
+            nzErrorTip="El código es requerido">
+            <nz-input-number
+                formControlName="id"
+                [nzDisabled]="true"
+                [nzPlaceHolder]="idMode() == 'auto' ? '(autogenerado)' : 'Ingresar'"
+                nzPlaceHolder="200"
+                style="width: 100%;"
+                [nzMin]="1"
+                [nzStep]="1">
+            </nz-input-number>
+        </nz-form-control>        
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Cliente
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24" 
+            nzErrorTip="El cliente es requerido">
+            <nz-select
+                formControlName="clienteId"
+                [nzPlaceHolder]="'Seleccionar...'"
+                [nzShowSearch]="true"
+                [nzAllowClear]="true">
+                @for (cliente  of clienteFacade.itemList(); track cliente.id) {
+                <nz-option
+                    [nzValue]="cliente.id"
+                    [nzLabel]="cliente.razonSocial">
+                </nz-option> 
+                }
+            </nz-select>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            F. Pedido
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24" 
+            nzErrorTip="La fecha de pedido es requerida">
+            <nz-date-picker
+                formControlName="fechaPedido"
+                [nzFormat]="'dd/MMM/yyyy'"
+                [nzPlaceHolder]="'Seleccionar...'"
+                [nzDisabledDate]="disabledFPedido"
+                style="width: 100%;">
+            </nz-date-picker>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            F. Entrega
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24" 
+            nzErrorTip="La fecha de entrega es requerida">
+            <nz-date-picker
+                formControlName="fechaEntrega"
+                [nzFormat]="'dd/MMM/yyyy'"
+                [nzPlaceHolder]="'Seleccionar...'"
+                [nzDisabledDate]="disabledFEntrega"
+                style="width: 100%;">
+            </nz-date-picker>
+        </nz-form-control>
+    </nz-form-item>
+    @if (mode() == 'edit') {
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24">
+            Entregado el
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24">
+            <nz-date-picker
+                formControlName="fechaEntregado"
+                [nzFormat]="'dd/MMM/yyyy'"
+                [nzPlaceHolder]="'Seleccionar...'"
+                [nzDisabledDate]="disabledFEntregado"
+                style="width: 100%;">
+            </nz-date-picker>
+        </nz-form-control>
+    </nz-form-item>
+    }
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Monto Total
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24" 
+            nzErrorTip="El monto total es requerido">
+            <nz-input-number
+                formControlName="total"
+                [nzPlaceHolder]="'Ingresar'"
+                nzPlaceHolder="0"
+                style="width: 100%;"
+                [nzMin]="0"
+                [nzStep]="1">
+                <span nzInputAddonBefore>Gs.</span>
+            </nz-input-number>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Descripción
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24"
+            nzErrorTip="La descripción es requerida">
+            <textarea
+                formControlName="descripcion"
+                nz-input
+                rows="5"
+                placeholder="Ingresar...">
+            </textarea>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+<ng-template #alert></ng-template>

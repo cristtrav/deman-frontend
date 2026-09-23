@@ -50,10 +50,8 @@ export const routes: Routes = [
             },
             {
                 path: 'pedidos',
-                loadComponent: () => import('./feature/pedido/presentation/page/pedidos-page/pedidos-page').then(m => m.PedidosPage),
-                data: { breadcrumb: 'Pedidos' },
+                loadChildren: () => import('./feature/pedido/presentation/pedidos.route').then(m => m.pedidosRoutes),
             }
-            
         ]
     }
 ];
