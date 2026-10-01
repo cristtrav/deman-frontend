@@ -4,7 +4,7 @@ import { PedidoFacade } from '../../../application/facade/pedido.facade';
 import componentConfig from './component.config';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { PedidoForm } from '../../component/pedido-form/pedido-form';
-import { Pedido } from '../../../application/model/pedido.model';
+import { Pedido } from '../../../domain/model/pedido.model';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { formatDate } from '@angular/common';
 import { formatNumber } from '@angular/common';
@@ -85,11 +85,11 @@ export class PedidosPage {
     this.pedidoFacade.pageSize.set(params.pageSize);
     if(params.sort.length > 0){
       const sort = params.sort[0];
-      this.pedidoFacade.sort.set(sort.key);
-      this.pedidoFacade.sortOrder.set(sort.value === 'ascend' ? 'asc' : 'desc');
+      this.pedidoFacade.sortField.set(sort.key);
+      this.pedidoFacade.sortDirection.set(sort.value === 'ascend' ? 'asc' : 'desc');
     } else {
-      this.pedidoFacade.sort.set(undefined);
-      this.pedidoFacade.sortOrder.set('asc');
+      this.pedidoFacade.sortField.set(undefined);
+      this.pedidoFacade.sortDirection.set('asc');
     }
   }
 

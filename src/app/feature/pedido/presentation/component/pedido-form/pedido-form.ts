@@ -1,9 +1,9 @@
 import { Component, computed, effect, ElementRef, Inject, input, LOCALE_ID, model, output, signal, viewChild, ViewContainerRef } from '@angular/core';
 import componentConfig from './component.config';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Pedido } from '../../../application/model/pedido.model';
+import { Pedido } from '../../../domain/model/pedido.model';
 import { ClienteFacade } from '../../../application/facade/cliente.facade';
-import { Cliente } from '../../../application/model/cliente.model';
+import { Cliente } from '../../../domain/model/cliente.model';
 import { Temporal } from '@js-temporal/polyfill';
 import { TemporalUtil } from '@shared/temporal/temporal.util';
 import { PedidoCommandFacade } from '../../../application/facade/pedido-command.facade';

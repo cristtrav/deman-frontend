@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Cliente } from "../model/cliente.model";
+import { Cliente } from "../../domain/model/cliente.model";
 import { BaseFacade } from "@shared/facade/base.facade";
 
 @Injectable()

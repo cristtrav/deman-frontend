@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { computed, inject, signal } from "@angular/core";
-import { ApiResponse } from "@shared/pagination/api-response.model";
+import { ApiResponse } from "@shared/api-model/api-response.model";
 
 export abstract class CommandFacade<ItemType, NewType, EditType>{
     readonly isSaving = computed(() => this.status() == 'saving');

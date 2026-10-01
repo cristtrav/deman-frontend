@@ -1,4 +1,4 @@
-import { Pagination } from "./pagination.model";
+import { Pagination } from "../api-model/pagination.model";
 
 export interface PaginatedResponse<T> {
   data: T[];
