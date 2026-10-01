@@ -1,0 +1,46 @@
+<form nz-form [formGroup]="form">
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24">
+            Código
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24">
+            <nz-input-number
+                formControlName="id"
+                [nzDisabled]="true"
+                [nzPlaceHolder]="mode() == 'add' ? '(autogenerado)' : ''"
+                style="width: 100%;">
+            </nz-input-number>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Fecha
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24"
+            nzErrorTip="La fecha es requerida">
+            <nz-date-picker
+                formControlName="fecha"
+                [nzFormat]="'dd/MMM/yyyy'"
+                [nzPlaceHolder]="'Seleccionar...'"
+                style="width: 100%;">
+            </nz-date-picker>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+            Monto
+        </nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24"
+            nzErrorTip="El monto es requerido y debe ser mayor a 0">
+            <nz-input-number
+                formControlName="monto"
+                [nzPlaceHolder]="'Ingresar'"
+                style="width: 100%;"
+                [nzMin]="1"
+                [nzStep]="1">
+                <span nzInputAddonBefore>Gs.</span>
+            </nz-input-number>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+<ng-template #alert></ng-template>

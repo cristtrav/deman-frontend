@@ -10,6 +10,7 @@ import { formatDate } from '@angular/common';
 import { formatNumber } from '@angular/common';
 import { PedidoCommandFacade } from '../../../application/facade/pedido-command.facade';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'pedidos-page',
@@ -45,7 +46,9 @@ export class PedidosPage {
     public readonly pedidoFacade: PedidoFacade,
     public readonly modal: NzModalService,
     private readonly pedidoCommandFacade: PedidoCommandFacade,
-    private readonly notif: NzNotificationService
+    private readonly notif: NzNotificationService,
+    private readonly router: Router,
+    private readonly aroute: ActivatedRoute
   ) { 
     effect(()=> {
       const deletedId = pedidoCommandFacade.deletedId();
@@ -102,6 +105,10 @@ export class PedidosPage {
     this.pedidoEdit.set(pedido);
     this.formMode.set('edit');
     this.showModal();
+  }
+
+  verDetalle(pedido: Pedido){
+    this.router.navigate([pedido.id], { relativeTo: this.aroute });
   }
 
   reload(){

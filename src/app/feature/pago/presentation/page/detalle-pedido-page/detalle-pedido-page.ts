@@ -1,0 +1,126 @@
+import { Component, computed, effect, Inject, inject, LOCALE_ID, signal, viewChild } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { formatDate, formatNumber } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map } from 'rxjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { ToolbarButton } from '@core/presentation/model/toolbar-button.model';
+import componentConfig from './component.config';
+import { PagoForm } from '../../component/pago-form/pago-form';
+import { Pago } from '../../../domain/model/pago.model';
+import { PedidoFacade } from '../../../application/facade/pedido.facade';
+import { PagoFacade } from '../../../application/facade/pago.facade';
+import { PagoCommandFacade } from '../../../application/facade/pago-command.facade';
+
+@Component({
+  selector: 'detalle-pedido-page',
+  imports: componentConfig.imports,
+  providers: componentConfig.providers,
+  templateUrl: './detalle-pedido-page.html',
+  styleUrl: './detalle-pedido-page.scss'
+})
+export class DetallePedidoPage {
+  private readonly aroute = inject(ActivatedRoute);
+  readonly pagoFormView = viewChild.required<PagoForm>(PagoForm);
+  readonly isModalFormVisible = signal(false);
+  readonly formMode = signal<'add' | 'edit'>('add');
+  readonly pagoEdit = signal<Pago | undefined>(undefined);
+  readonly idPedido = toSignal(
+    this.aroute.paramMap.pipe(map(params => {
+      const id = Number(params.get('idPedido'));
+      return Number.isInteger(id) && id > 0 ? id : undefined;
+    }))
+  );
+  readonly saldo = computed(() => (this.pedidoFacade.item()?.total ?? 0) - this.pagoFacade.totalPagado());
+
+  readonly toolbarButtons: ToolbarButton[] = [
+    {
+      label: 'Registrar Pago',
+      icon: 'plus',
+      type: 'primary',
+      actionFn: () => this.newPago()
+    },
+    {
+      label: 'Recargar',
+      icon: 'reload',
+      type: 'default',
+      actionFn: () => this.reloadAll()
+    },
+    {
+      label: 'Volver',
+      icon: 'arrow-left',
+      type: 'default',
+      actionFn: () => this.router.navigate(['..'], { relativeTo: this.aroute })
+    }
+  ]
+
+  constructor(
+    @Inject(LOCALE_ID) private locale: string,
+    public readonly pedidoFacade: PedidoFacade,
+    public readonly pagoFacade: PagoFacade,
+    public readonly modal: NzModalService,
+    private readonly pagoCommandFacade: PagoCommandFacade,
+    private readonly notif: NzNotificationService,
+    private readonly router: Router
+  ) {
+    effect(() => {
+      const idPedido = this.idPedido();
+      this.pedidoFacade.id.set(idPedido);
+      this.pagoFacade.pedidoId.set(idPedido);
+    });
+    effect(() => {
+      if(this.pedidoFacade.error()) this.notif.error('Error', `No se pudo cargar el pedido «${this.idPedido() ?? ''}»`);
+    });
+    effect(() => {
+      const deletedId = pagoCommandFacade.deletedId();
+      if(deletedId == null) return;
+      this.notif.success('Éxito', 'Pago eliminado');
+      this.pagoFacade.reload();
+    });
+    effect(() => {
+      if(pagoCommandFacade.status() == 'error') this.notif.error('Error al eliminar', pagoCommandFacade.error() ?? '');
+    });
+  }
+
+  newPago(){
+    if(this.idPedido() == null) return;
+    this.pagoEdit.set(undefined);
+    this.formMode.set('add');
+    this.showModal();
+  }
+
+  editPago(pago: Pago){
+    this.pagoEdit.set(pago);
+    this.formMode.set('edit');
+    this.showModal();
+  }
+
+  reload(){
+    this.pagoFacade.reload();
+  }
+
+  reloadAll(){
+    this.pedidoFacade.reload();
+    this.pagoFacade.reload();
+  }
+
+  showModal(){ this.isModalFormVisible.set(true); }
+  hideModal(){ this.isModalFormVisible.set(false); }
+
+  confirmDelete(pago: Pago){
+    const fecha = formatDate(pago.fecha, 'dd/MM/yy', this.locale);
+    const monto = formatNumber(pago.monto, this.locale);
+    this.modal.confirm({
+      nzTitle: '¿Desea eliminar el pago?',
+      nzContent: `Cód.:${pago.id} | Fecha: ${fecha} | Monto: Gs.${monto}`,
+      nzOkDanger: true,
+      nzOkText: 'Eliminar',
+      nzOnOk: () => this.delete(pago.id)
+    })
+  }
+
+  private delete(id: number){
+    this.pagoCommandFacade.eliminar(id);
+  }
+}
