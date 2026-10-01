@@ -34,7 +34,15 @@
                         <nz-descriptions-item nzTitle="Total">Gs.{{ (pedido?.total ?? 0) | number }}</nz-descriptions-item>
                         <nz-descriptions-item nzTitle="Pagado">Gs.{{ pagoFacade.totalPagado() | number }}</nz-descriptions-item>
                         <nz-descriptions-item nzTitle="Saldo">
-                            <span [class.saldo-pendiente]="saldo() > 0">Gs.{{ saldo() | number }}</span>
+                            @if (!pedido) {
+                                -
+                            } @else if (saldo() > 0) {
+                                <nz-tag nzColor="red">Gs.{{ saldo() | number }}</nz-tag>
+                            } @else if (saldo() < 0) {
+                                <nz-tag nzColor="orange">Gs.{{ saldo() | number }}</nz-tag>
+                            } @else {
+                                <nz-tag nzColor="green">Pagado</nz-tag>
+                            }
                         </nz-descriptions-item>
                         <nz-descriptions-item nzTitle="Descripción">
                             <span class="descripcion">{{ pedido?.descripcion ?? '-' }}</span>

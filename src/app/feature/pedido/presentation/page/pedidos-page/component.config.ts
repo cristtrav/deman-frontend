@@ -8,6 +8,7 @@ import { NzButtonModule } from "ng-zorro-antd/button";
 import { ClienteFacade } from "../../../application/facade/cliente.facade";
 import { NzIconModule } from "ng-zorro-antd/icon";
 import { NzFlexModule } from "ng-zorro-antd/flex";
+import { NzTagModule } from "ng-zorro-antd/tag";
 import { PedidoCommandFacade } from "../../../application/facade/pedido-command.facade";
 
 export default {
@@ -20,7 +21,8 @@ export default {
         PedidoForm,
         NzButtonModule,
         NzIconModule,
-        NzFlexModule
+        NzFlexModule,
+        NzTagModule
     ],
     providers: [
         PedidoFacade,

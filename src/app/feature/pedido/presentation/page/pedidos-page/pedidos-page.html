@@ -39,7 +39,15 @@
                     }
                 </td>                
                 <td nzAlign="right">Gs.{{ pedido.total | number }}</td>
-                <td nzAlign="right">Gs.{{ pedido.saldo | number }}</td>
+                <td nzAlign="right">
+                    @if (pedido.saldo > 0) {
+                        <nz-tag nzColor="red">Gs.{{ pedido.saldo | number }}</nz-tag>
+                    } @else if (pedido.saldo < 0) {
+                        <nz-tag nzColor="orange">Gs.{{ pedido.saldo | number }}</nz-tag>
+                    } @else {
+                        <nz-tag nzColor="green">Pagado</nz-tag>
+                    }
+                </td>
                 <td nz-flex nzGap="small" nzJustify="center">
                     <button nz-button nzType="default" (click)="verDetalle(pedido)">
                         <nz-icon nzType="eye" nzTheme="outline"></nz-icon>
