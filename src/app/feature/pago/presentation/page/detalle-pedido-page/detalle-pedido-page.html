@@ -20,12 +20,10 @@
                         <nz-descriptions-item nzTitle="Entregado el">{{ (pedido?.fechaEntregado | date:'dd/MMM/yyyy') ?? '-' }}</nz-descriptions-item>
                         <nz-descriptions-item nzTitle="Estado">
                             @if (pedido) {
-                                @if (pedido.entregado) {
+                                @if (pedido.fechaEntregado) {
                                     <nz-tag nzColor="green">Entregado</nz-tag>
-                                } @else if (pedido.confirmado) {
-                                    <nz-tag nzColor="blue">Confirmado</nz-tag>
                                 } @else {
-                                    <nz-tag>Pendiente</nz-tag>
+                                    <nz-tag nzColor="gold">Pendiente</nz-tag>
                                 }
                             } @else {
                                 -
