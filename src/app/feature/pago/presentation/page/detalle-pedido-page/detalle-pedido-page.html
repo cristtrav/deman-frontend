@@ -96,7 +96,7 @@
 </ng-template>
 <ng-template #modalContent>
     <pago-form
-        (reload)="reload()"
+        (reload)="reloadAll()"
         [pedidoId]="idPedido() ?? -1"
         [pagoEdit]="pagoEdit()"
         [mode]="formMode()">

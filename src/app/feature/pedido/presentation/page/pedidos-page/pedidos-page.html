@@ -39,7 +39,7 @@
                     }
                 </td>                
                 <td nzAlign="right">Gs.{{ pedido.total | number }}</td>
-                <td nzAlign="right">Gs. 0</td>
+                <td nzAlign="right">Gs.{{ pedido.saldo | number }}</td>
                 <td nz-flex nzGap="small" nzJustify="center">
                     <button nz-button nzType="default" (click)="verDetalle(pedido)">
                         <nz-icon nzType="eye" nzTheme="outline"></nz-icon>

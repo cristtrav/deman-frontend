@@ -11,4 +11,5 @@ export interface Pedido {
     entregado: boolean;
     descripcion: string;
     total: number;
+    saldo: number;
 }

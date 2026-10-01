@@ -32,7 +32,7 @@ export class DetallePedidoPage {
       return Number.isInteger(id) && id > 0 ? id : undefined;
     }))
   );
-  readonly saldo = computed(() => (this.pedidoFacade.item()?.total ?? 0) - this.pagoFacade.totalPagado());
+  readonly saldo = computed(() => this.pedidoFacade.item()?.saldo ?? 0);
 
   readonly toolbarButtons: ToolbarButton[] = [
     {
@@ -76,7 +76,7 @@ export class DetallePedidoPage {
       const deletedId = pagoCommandFacade.deletedId();
       if(deletedId == null) return;
       this.notif.success('Éxito', 'Pago eliminado');
-      this.pagoFacade.reload();
+      this.reloadAll();
     });
     effect(() => {
       if(pagoCommandFacade.status() == 'error') this.notif.error('Error al eliminar', pagoCommandFacade.error() ?? '');
@@ -94,10 +94,6 @@ export class DetallePedidoPage {
     this.pagoEdit.set(pago);
     this.formMode.set('edit');
     this.showModal();
-  }
-
-  reload(){
-    this.pagoFacade.reload();
   }
 
   reloadAll(){
