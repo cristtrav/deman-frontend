@@ -1,0 +1,60 @@
+<core-feature-layout
+    [title]="'Configuración'"
+    [subtitle]="'Empresa'"
+    [toolbarButtons]="toolbarButtons">
+    <nz-spin [nzSpinning]="empresaFacade.loading() || empresaCommandFacade.isSaving()">
+        @if (!empresaFacade.loading() && !empresaFacade.error() && !empresaFacade.registrada()) {
+            <nz-alert
+                class="aviso"
+                nzType="warning"
+                nzShowIcon
+                nzMessage="Los datos de la empresa todavía no fueron registrados"
+                nzDescription="Son necesarios para emitir recibos: mientras no se registren no se podrán cargar pagos.">
+            </nz-alert>
+        }
+        <form nz-form [formGroup]="form" class="formulario" (ngSubmit)="save()">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>
+                    Nombre
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="El nombre es requerido. Máx. 100 caracteres.">
+                    <input nz-input formControlName="nombre" placeholder="Ingresar" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24">
+                    Dirección
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Máx. 200 caracteres.">
+                    <input nz-input formControlName="direccion" placeholder="Ingresar" />
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24">
+                    RUC
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="rucError" nzExtra="Opcional. Formato: 1234567-9">
+                    <input nz-input formControlName="ruc" placeholder="Ingresar" />
+                    <ng-template #rucError let-control>
+                        @if (control.errors?.['rucFormato']) {
+                            El formato debe ser número-dígito verificador (ej.: 1234567-9).
+                        } @else if (control.errors?.['rucDigitoVerificador']) {
+                            El dígito verificador no es válido.
+                        }
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24">
+                    Teléfono
+                </nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Máx. 20 caracteres.">
+                    <input nz-input formControlName="telefono" placeholder="Ingresar" />
+                </nz-form-control>
+            </nz-form-item>
+            <!-- Permite guardar con Enter -->
+            <button type="submit" hidden></button>
+        </form>
+        <ng-template #alert></ng-template>
+    </nz-spin>
+</core-feature-layout>
