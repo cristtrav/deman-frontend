@@ -1,0 +1,102 @@
+<div class="acciones no-imprimir">
+    <button nz-button nzType="primary" [disabled]="!recibo()" (click)="imprimir()">
+        <nz-icon nzType="printer"></nz-icon>
+        Imprimir
+    </button>
+    <button nz-button nzType="default" (click)="cerrar()">
+        <nz-icon nzType="close"></nz-icon>
+        Cerrar
+    </button>
+</div>
+
+@if (reciboFacade.loading()) {
+    <p class="estado no-imprimir">Cargando recibo...</p>
+} @else if (recibo(); as recibo) {
+    <article class="recibo">
+        @if (recibo.anulacion) {
+            <div class="marca-anulado">ANULADO</div>
+        }
+        <header class="encabezado">
+            <div class="empresa">
+                @if (recibo.empresa; as empresa) {
+                    <div class="empresa-nombre">{{ empresa.nombre }}</div>
+                    @if (empresa.ruc) { <div>RUC: {{ empresa.ruc }}</div> }
+                    @if (empresa.direccion) { <div>{{ empresa.direccion }}</div> }
+                    @if (empresa.telefono) { <div>Tel.: {{ empresa.telefono }}</div> }
+                } @else {
+                    <div class="empresa-faltante">Datos de la empresa no registrados</div>
+                }
+            </div>
+            <div class="titulo">
+                <div class="titulo-texto">RECIBO DE DINERO</div>
+                <div class="numero">Nº {{ numeroFormateado() }}</div>
+                <div class="monto-destacado">Gs. {{ recibo.monto | number }}</div>
+            </div>
+        </header>
+
+        <section class="cuerpo">
+            <div class="linea">
+                <span class="etiqueta">Recibí de:</span>
+                <span class="valor">{{ recibo.cliente.razonSocial }}</span>
+                @if (recibo.cliente.ruc) {
+                    <span class="etiqueta ruc">RUC:</span>
+                    <span class="valor">{{ recibo.cliente.ruc }}</span>
+                }
+            </div>
+            <div class="linea">
+                <span class="etiqueta">La suma de:</span>
+                <span class="valor letras">{{ montoEnLetras() }}</span>
+            </div>
+            <div class="linea">
+                <span class="etiqueta">En concepto de:</span>
+                <span class="valor">Pago a cuenta del pedido Nº {{ recibo.pedidoId }}</span>
+            </div>
+            <div class="linea">
+                <span class="etiqueta">Fecha de pago:</span>
+                <span class="valor">{{ recibo.fechaPago | date:'dd/MM/yyyy' }}</span>
+            </div>
+        </section>
+
+        <table class="saldos">
+            <thead>
+                <tr>
+                    <th>Total del pedido</th>
+                    <th>Saldo anterior</th>
+                    <th>Este pago</th>
+                    <th>{{ saldoAFavor() ? 'Saldo a favor' : 'Saldo pendiente' }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Gs. {{ recibo.totalPedido | number }}</td>
+                    <td>Gs. {{ recibo.saldoAnterior | number }}</td>
+                    <td>Gs. {{ recibo.monto | number }}</td>
+                    <td>Gs. {{ (saldoAFavor() ? -recibo.saldoPosterior : recibo.saldoPosterior) | number }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <footer class="pie">
+            <div class="notas">
+                <div>
+                    Emitido el {{ recibo.fechaEmision | date:'dd/MM/yyyy HH:mm' }}
+                    @if (recibo.generadoPorMigracion) {
+                        (regularización de un pago registrado antes de emitir recibos)
+                    }
+                </div>
+                @if (recibo.anulacion; as anulacion) {
+                    <div class="anulacion">
+                        Anulado el {{ anulacion.fecha | date:'dd/MM/yyyy HH:mm' }}. Motivo: {{ anulacion.motivo }}
+                    </div>
+                }
+                <div class="leyenda">Comprobante interno, no válido como factura.</div>
+            </div>
+            <div class="firma">
+                <div class="firma-linea"></div>
+                <div>Firma y aclaración</div>
+            </div>
+        </footer>
+    </article>
+} @else {
+    <p class="estado no-imprimir">No se encontró el recibo Nº {{ numeroFormateado() }}</p>
+}

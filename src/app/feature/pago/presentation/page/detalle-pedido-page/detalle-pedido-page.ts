@@ -97,6 +97,27 @@ export class DetallePedidoPage {
     this.pagoFacade.reload();
   }
 
+  /**
+   * Abre el recibo en una pestaña aparte, sin el layout de la aplicación, para imprimirlo.
+   */
+  imprimirRecibo(numero: number){
+    const url = this.router.serializeUrl(this.router.createUrlTree(['/recibos', numero, 'imprimir']));
+    window.open(url, '_blank');
+  }
+
+  ofrecerImpresion(pago: Pago | null){
+    const numero = pago?.numeroRecibo;
+    if(numero == null) return;
+    this.hideModal();
+    this.modal.confirm({
+      nzTitle: `Pago registrado. Recibo Nº ${numero}`,
+      nzContent: '¿Desea imprimir el recibo ahora?',
+      nzOkText: 'Imprimir',
+      nzCancelText: 'Más tarde',
+      nzOnOk: () => this.imprimirRecibo(numero)
+    });
+  }
+
   showModal(){ this.isModalFormVisible.set(true); }
   hideModal(){ this.isModalFormVisible.set(false); }
 

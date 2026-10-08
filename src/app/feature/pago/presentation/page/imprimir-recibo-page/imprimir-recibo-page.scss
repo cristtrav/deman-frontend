@@ -1,0 +1,176 @@
+// El recibo ocupa la mitad superior de una hoja A4
+@page {
+  size: A4;
+  margin: 10mm;
+}
+
+:host {
+  display: block;
+  min-height: 100vh;
+  padding: 24px 16px;
+  background-color: #f0f2f5;
+}
+
+.acciones {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.estado {
+  text-align: center;
+}
+
+.recibo {
+  position: relative;
+  box-sizing: border-box;
+  width: 190mm;
+  margin: 0 auto;
+  padding: 8mm 10mm;
+  overflow: hidden;
+  border: 1px solid #000;
+  background-color: white;
+  color: #000;
+  font-size: 10.5pt;
+  line-height: 1.4;
+}
+
+.marca-anulado {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-20deg);
+  color: rgba(207, 19, 34, 0.25);
+  font-size: 64pt;
+  font-weight: 700;
+  letter-spacing: 8px;
+  pointer-events: none;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  gap: 8mm;
+  padding-bottom: 4mm;
+  border-bottom: 1px solid #000;
+}
+
+.empresa-nombre {
+  font-size: 14pt;
+  font-weight: 700;
+}
+
+.empresa-faltante {
+  font-style: italic;
+}
+
+.titulo {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.titulo-texto {
+  font-size: 13pt;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.numero {
+  font-size: 12pt;
+  font-weight: 600;
+}
+
+.monto-destacado {
+  display: inline-block;
+  margin-top: 2mm;
+  padding: 1mm 3mm;
+  border: 1px solid #000;
+  font-size: 13pt;
+  font-weight: 700;
+}
+
+.cuerpo {
+  padding: 4mm 0;
+}
+
+.linea {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2mm;
+  padding: 1.5mm 0;
+  border-bottom: 1px dotted #888;
+}
+
+.etiqueta {
+  font-weight: 600;
+}
+
+.ruc {
+  margin-left: auto;
+}
+
+.letras {
+  text-transform: uppercase;
+}
+
+.saldos {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+
+  th, td {
+    padding: 1.5mm;
+    border: 1px solid #000;
+  }
+
+  th {
+    font-weight: 600;
+  }
+}
+
+.pie {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 8mm;
+  margin-top: 6mm;
+  font-size: 9pt;
+}
+
+.anulacion {
+  font-weight: 600;
+}
+
+.leyenda {
+  margin-top: 1mm;
+  font-style: italic;
+}
+
+.firma {
+  flex-shrink: 0;
+  width: 60mm;
+  text-align: center;
+}
+
+.firma-linea {
+  height: 12mm;
+  border-bottom: 1px solid #000;
+}
+
+@media print {
+  :host {
+    min-height: 0;
+    padding: 0;
+    background: none;
+  }
+
+  .no-imprimir {
+    display: none !important;
+  }
+
+  .recibo {
+    margin: 0;
+  }
+}

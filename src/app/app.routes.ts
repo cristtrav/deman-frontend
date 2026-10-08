@@ -6,6 +6,11 @@ export const routes: Routes = [
     { path: '', redirectTo: '/app/dashboard', pathMatch: 'full' },
     { path: 'app', redirectTo: '/app/dashboard', pathMatch: 'full' },
     {
+        // Fuera de MainLayout: la página contiene solo el recibo, lista para imprimir
+        path: 'recibos/:numero/imprimir',
+        loadComponent: () => import('./feature/pago/presentation/page/imprimir-recibo-page/imprimir-recibo-page').then(m => m.ImprimirReciboPage)
+    },
+    {
         path: 'app', component: MainLayout, data: { breadcrumb: 'App'}, children: [
             { path: 'dashboard', component: Dashboard, data: { breadcrumb: 'Dashboard' } },
             {
