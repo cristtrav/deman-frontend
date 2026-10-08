@@ -30,6 +30,7 @@ export class PedidoForm {
   readonly alertView = viewChild.required('alert', {read: ViewContainerRef});
   readonly pedidoEdit = input<Pedido>();
   readonly reload = output<number>();
+  readonly totalBloqueado = computed(() => this.mode() == 'edit' && (this.pedidoEdit()?.tienePagos ?? false));
 
   form = new FormGroup({
     id: new FormControl<number | null>(null),
@@ -52,6 +53,10 @@ export class PedidoForm {
       if(currMode == 'edit' && currPedidoEdit) this.cargarDatos(currPedidoEdit);
       if(currMode == 'edit') this.idMode.set('manual');
       if(currMode == 'add') this.form.reset();
+    })
+    effect(() => {
+      if(this.totalBloqueado()) this.form.controls.total.disable();
+      else this.form.controls.total.enable();
     })
     effect(() => {
       const idModeRead = this.idMode();

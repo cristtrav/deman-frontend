@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { computed, inject, signal } from "@angular/core";
 import { ApiResponse } from "@shared/api-model/api-response.model";
 
@@ -10,10 +10,10 @@ export abstract class CommandFacade<ItemType, NewType, EditType>{
     readonly status = signal<'initial' | 'saving' | 'success' | 'error'>('initial');
     readonly dataChange = signal<number>(0);
     readonly deletedId = signal<number | null>(null);
-    private readonly http = inject(HttpClient);
+    protected readonly http = inject(HttpClient);
 
     constructor(
-        private readonly baseUrl: string,
+        protected readonly baseUrl: string,
     ){ }
 
     crear(newItem: NewType){
@@ -27,12 +27,7 @@ export abstract class CommandFacade<ItemType, NewType, EditType>{
                 this.savedItem.set(resp.data);
                 this.dataChange.update(n => n + 1);
             },
-            error: (err) => {
-                this.error.set(err.error);
-                this.message.set('');
-                this.savedItem.set(null);
-                this.status.set('error');                
-            }
+            error: (err) => this.setError(err)
         });
     }
 
@@ -47,12 +42,7 @@ export abstract class CommandFacade<ItemType, NewType, EditType>{
                 this.savedItem.set(resp.data);
                 this.dataChange.update(n => n + 1);
             },
-            error: (err) => {
-                this.error.set(err.error);
-                this.message.set('');
-                this.savedItem.set(null);
-                this.status.set('error');
-            }
+            error: (err) => this.setError(err)
         });
     }
 
@@ -68,12 +58,15 @@ export abstract class CommandFacade<ItemType, NewType, EditType>{
                 this.dataChange.update(n => n + 1);
                 this.deletedId.set(id);
             },
-            error: (err) => {
-                this.error.set(err.error);
-                this.message.set('');
-                this.savedItem.set(null);
-                this.status.set('error');
-            }
+            error: (err) => this.setError(err)
         });
+    }
+
+    protected setError(err: HttpErrorResponse){
+        // El backend responde con un ErrorResponseDTO: se muestra su mensaje, no el objeto completo
+        this.error.set(err.error?.message ?? err.message);
+        this.message.set('');
+        this.savedItem.set(null);
+        this.status.set('error');
     }
 }

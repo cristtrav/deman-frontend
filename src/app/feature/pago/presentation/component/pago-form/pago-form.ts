@@ -1,4 +1,4 @@
-import { Component, computed, effect, Inject, input, LOCALE_ID, model, output, viewChild, ViewContainerRef } from '@angular/core';
+import { Component, computed, effect, Inject, input, LOCALE_ID, output, viewChild, ViewContainerRef } from '@angular/core';
 import componentConfig from './component.config';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
@@ -6,7 +6,6 @@ import { NzAlertUtil } from '@core/presentation/util/nz-alert.util';
 import { Pago } from '../../../domain/model/pago.model';
 import { PagoCommandFacade } from '../../../application/facade/pago-command.facade';
 import { NewPago } from '../../../application/model/new-pago.model';
-import { EditPago } from '../../../application/model/edit-pago.model';
 
 @Component({
   selector: 'pago-form',
@@ -16,9 +15,7 @@ import { EditPago } from '../../../application/model/edit-pago.model';
   styleUrl: './pago-form.scss'
 })
 export class PagoForm {
-  readonly mode = model<'add' | 'edit'>('add');
   readonly pedidoId = input.required<number>();
-  readonly pagoEdit = input<Pago>();
   readonly isSavingChange = output<boolean>();
   readonly isSaving = computed(() => this.pagoCommandFacade.isSaving());
   readonly savedPago = output<Pago | null>();
@@ -36,12 +33,6 @@ export class PagoForm {
     public readonly pagoCommandFacade: PagoCommandFacade
   ) {
     effect(() => {
-      const currMode = this.mode();
-      const currPagoEdit = this.pagoEdit();
-      if(currMode == 'edit' && currPagoEdit) this.cargarDatos(currPagoEdit);
-      if(currMode == 'add') this.form.reset({ fecha: new Date() });
-    });
-    effect(() => {
       this.isSavingChange.emit(this.pagoCommandFacade.isSaving());
     });
     effect(() => {
@@ -52,11 +43,13 @@ export class PagoForm {
         NzAlertUtil.showSuccessAlert(this.alertView(), this.pagoCommandFacade.message());
       } else {
         console.log(this.pagoCommandFacade.error());
-        NzAlertUtil.showErrorAlert(this.alertView(), this.mode() == 'add' ? 'Error al registrar' : 'Error al editar', this.pagoCommandFacade.error() ?? '');
+        NzAlertUtil.showErrorAlert(this.alertView(), 'Error al registrar', this.pagoCommandFacade.error() ?? '');
       }
     });
     effect(() => {
       const saved = this.pagoCommandFacade.savedItem();
+      // Se limpia el monto para que un segundo clic no registre (y emita recibo de) un pago duplicado
+      if(saved) this.form.reset({ fecha: new Date() });
       this.savedPago.emit(saved);
     });
     effect(() => {
@@ -72,12 +65,7 @@ export class PagoForm {
     });
     if(!this.form.valid) return;
 
-    if(this.mode() == 'add')
-      this.pagoCommandFacade.crear(this.getNewDto());
-    else {
-      const id: number = this.form.controls.id.value ?? -1;
-      this.pagoCommandFacade.editar(id, this.getEditDto());
-    }
+    this.pagoCommandFacade.crear(this.getNewDto());
   }
 
   private getNewDto(): NewPago{
@@ -88,22 +76,8 @@ export class PagoForm {
     }
   }
 
-  private getEditDto(): EditPago{
-    return {
-      pedidoId: this.pedidoId(),
-      fecha: this.toString(this.form.controls.fecha.value),
-      monto: this.form.controls.monto.value ?? 0
-    }
-  }
-
   private toString(date: Date | null | undefined): string{
     if(!date) return '0000-00-00';
     return formatDate(date, 'yyyy-MM-dd', this.locale);
-  }
-
-  private cargarDatos(pago: Pago){
-    this.form.controls.id.setValue(pago.id);
-    this.form.controls.fecha.setValue(new Date(`${pago.fecha}T00:00:00`));
-    this.form.controls.monto.setValue(pago.monto);
   }
 }

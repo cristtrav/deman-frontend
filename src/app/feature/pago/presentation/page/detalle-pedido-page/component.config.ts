@@ -9,6 +9,9 @@ import { NzGridModule } from "ng-zorro-antd/grid";
 import { NzDescriptionsModule } from "ng-zorro-antd/descriptions";
 import { NzSpinModule } from "ng-zorro-antd/spin";
 import { NzTagModule } from "ng-zorro-antd/tag";
+import { NzFormModule } from "ng-zorro-antd/form";
+import { NzInputModule } from "ng-zorro-antd/input";
+import { ReactiveFormsModule } from "@angular/forms";
 import { PagoForm } from "../../component/pago-form/pago-form";
 import { PedidoFacade } from "../../../application/facade/pedido.facade";
 import { PagoFacade } from "../../../application/facade/pago.facade";
@@ -28,7 +31,10 @@ export default {
         NzGridModule,
         NzDescriptionsModule,
         NzSpinModule,
-        NzTagModule
+        NzTagModule,
+        NzFormModule,
+        NzInputModule,
+        ReactiveFormsModule
     ],
     providers: [
         PedidoFacade,

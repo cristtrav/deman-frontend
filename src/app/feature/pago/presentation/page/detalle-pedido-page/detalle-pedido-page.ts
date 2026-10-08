@@ -1,6 +1,6 @@
-import { Component, computed, effect, Inject, inject, LOCALE_ID, signal, viewChild } from '@angular/core';
+import { Component, computed, effect, inject, signal, viewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { formatDate, formatNumber } from '@angular/common';
+import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -24,8 +24,12 @@ export class DetallePedidoPage {
   private readonly aroute = inject(ActivatedRoute);
   readonly pagoFormView = viewChild.required<PagoForm>(PagoForm);
   readonly isModalFormVisible = signal(false);
-  readonly formMode = signal<'add' | 'edit'>('add');
-  readonly pagoEdit = signal<Pago | undefined>(undefined);
+  readonly isModalAnularVisible = signal(false);
+  readonly pagoAnular = signal<Pago | undefined>(undefined);
+  readonly motivoAnulacion = new FormControl<string>('', {
+    nonNullable: true,
+    validators: [Validators.required, Validators.pattern(/\S/)]
+  });
   readonly idPedido = toSignal(
     this.aroute.paramMap.pipe(map(params => {
       const id = Number(params.get('idPedido'));
@@ -56,11 +60,10 @@ export class DetallePedidoPage {
   ]
 
   constructor(
-    @Inject(LOCALE_ID) private locale: string,
     public readonly pedidoFacade: PedidoFacade,
     public readonly pagoFacade: PagoFacade,
     public readonly modal: NzModalService,
-    private readonly pagoCommandFacade: PagoCommandFacade,
+    public readonly pagoCommandFacade: PagoCommandFacade,
     private readonly notif: NzNotificationService,
     private readonly router: Router
   ) {
@@ -75,24 +78,17 @@ export class DetallePedidoPage {
     effect(() => {
       const deletedId = pagoCommandFacade.deletedId();
       if(deletedId == null) return;
-      this.notif.success('Éxito', 'Pago eliminado');
+      this.notif.success('Éxito', 'Pago anulado');
+      this.hideModalAnular();
       this.reloadAll();
     });
     effect(() => {
-      if(pagoCommandFacade.status() == 'error') this.notif.error('Error al eliminar', pagoCommandFacade.error() ?? '');
+      if(pagoCommandFacade.status() == 'error') this.notif.error('Error al anular', pagoCommandFacade.error() ?? '');
     });
   }
 
   newPago(){
     if(this.idPedido() == null) return;
-    this.pagoEdit.set(undefined);
-    this.formMode.set('add');
-    this.showModal();
-  }
-
-  editPago(pago: Pago){
-    this.pagoEdit.set(pago);
-    this.formMode.set('edit');
     this.showModal();
   }
 
@@ -104,19 +100,19 @@ export class DetallePedidoPage {
   showModal(){ this.isModalFormVisible.set(true); }
   hideModal(){ this.isModalFormVisible.set(false); }
 
-  confirmDelete(pago: Pago){
-    const fecha = formatDate(pago.fecha, 'dd/MM/yy', this.locale);
-    const monto = formatNumber(pago.monto, this.locale);
-    this.modal.confirm({
-      nzTitle: '¿Desea eliminar el pago?',
-      nzContent: `Cód.:${pago.id} | Fecha: ${fecha} | Monto: Gs.${monto}`,
-      nzOkDanger: true,
-      nzOkText: 'Eliminar',
-      nzOnOk: () => this.delete(pago.id)
-    })
+  confirmAnular(pago: Pago){
+    this.pagoAnular.set(pago);
+    this.motivoAnulacion.reset('');
+    this.isModalAnularVisible.set(true);
   }
 
-  private delete(id: number){
-    this.pagoCommandFacade.eliminar(id);
+  hideModalAnular(){ this.isModalAnularVisible.set(false); }
+
+  anular(){
+    const pago = this.pagoAnular();
+    this.motivoAnulacion.markAsDirty();
+    this.motivoAnulacion.updateValueAndValidity();
+    if(pago == null || this.motivoAnulacion.invalid) return;
+    this.pagoCommandFacade.anular(pago.id, this.motivoAnulacion.value.trim());
   }
 }

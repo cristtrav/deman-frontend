@@ -87,7 +87,8 @@
             Monto Total
         </nz-form-label>
         <nz-form-control [nzSm]="16" [nzXs]="24" 
-            nzErrorTip="El monto total es requerido">
+            nzErrorTip="El monto total es requerido"
+            [nzExtra]="totalBloqueado() ? 'El pedido tiene pagos registrados, el total no se puede modificar' : ''">
             <nz-input-number
                 formControlName="total"
                 [nzPlaceHolder]="'Ingresar'"

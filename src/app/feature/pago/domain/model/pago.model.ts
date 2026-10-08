@@ -3,4 +3,5 @@ export interface Pago {
     pedidoId: number;
     fecha: string;
     monto: number;
+    numeroRecibo?: number;
 }

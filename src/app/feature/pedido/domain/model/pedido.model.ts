@@ -12,4 +12,6 @@ export interface Pedido {
     descripcion: string;
     total: number;
     saldo: number;
+    /** Incluye pagos anulados. Con pagos registrados el total no se puede modificar. */
+    tienePagos: boolean;
 }

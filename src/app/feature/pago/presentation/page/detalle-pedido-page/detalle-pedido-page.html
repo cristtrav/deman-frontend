@@ -58,7 +58,7 @@
                     nzSize="small">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Recibo Nº</th>
                             <th>Fecha</th>
                             <th nzAlign="right">Monto</th>
                             <th nzAlign="center">Acc.</th>
@@ -67,15 +67,12 @@
                     <tbody>
                         @for (pago of tabla.data; track pago.id) {
                         <tr>
-                            <td>{{ pago.id }}</td>
+                            <td>{{ pago.numeroRecibo ?? '-' }}</td>
                             <td>{{ pago.fecha | date:'dd/MMM/yyyy' }}</td>
                             <td nzAlign="right">Gs.{{ pago.monto | number }}</td>
                             <td nz-flex nzGap="small" nzJustify="center">
-                                <button nz-button nzType="primary" (click)="editPago(pago)">
-                                    <nz-icon nzType="edit" nzTheme="outline"></nz-icon>
-                                </button>
-                                <button nz-button nzType="primary" nzDanger (click)="confirmDelete(pago)">
-                                    <nz-icon nzType="delete" nzTheme="outline"></nz-icon>
+                                <button nz-button nzType="primary" nzDanger title="Anular pago" (click)="confirmAnular(pago)">
+                                    <nz-icon nzType="stop" nzTheme="outline"></nz-icon>
                                 </button>
                             </td>
                         </tr>
@@ -98,14 +95,12 @@
     (nzOnCancel)="hideModal()">
 </nz-modal>
 <ng-template #modalTitle>
-    {{ formMode() == 'add' ? 'Registrar' : 'Editar'}} Pago
+    Registrar Pago
 </ng-template>
 <ng-template #modalContent>
     <pago-form
         (reload)="reloadAll()"
-        [pedidoId]="idPedido() ?? -1"
-        [pagoEdit]="pagoEdit()"
-        [mode]="formMode()">
+        [pedidoId]="idPedido() ?? -1">
     </pago-form>
 </ng-template>
 <ng-template #modalFooter>
@@ -116,11 +111,56 @@
             [nzLoading]="pagoFormView().isSaving()"
             (click)="pagoFormView().save()">
             <nz-icon nzType="save"></nz-icon>
-            {{ pagoFormView().mode() == 'edit' ? 'Editar' : 'Registrar'}}
+            Registrar
         </button>
         <button nz-button nzType="default" (click)="hideModal()">
             <nz-icon nzType="close"></nz-icon>
             Cerrar
+        </button>
+    </div>
+</ng-template>
+
+<nz-modal
+    [(nzVisible)]="isModalAnularVisible"
+    nzTitle="Anular Pago"
+    [nzContent]="modalAnularContent"
+    [nzFooter]="modalAnularFooter"
+    (nzOnCancel)="hideModalAnular()">
+</nz-modal>
+<ng-template #modalAnularContent>
+    @let pago = pagoAnular();
+    @if (pago) {
+        <p>Recibo Nº {{ pago.numeroRecibo ?? '-' }} | Fecha: {{ pago.fecha | date:'dd/MMM/yyyy' }} | Monto: Gs.{{ pago.monto | number }}</p>
+    }
+    <p class="aviso-anulacion">
+        El recibo quedará anulado y el monto volverá a sumarse al saldo del pedido.
+        Esta acción no se puede deshacer; para corregir el pago, registre uno nuevo.
+    </p>
+    <nz-form-item>
+        <nz-form-control nzErrorTip="Indique el motivo de la anulación">
+            <textarea
+                nz-input
+                rows="3"
+                [formControl]="motivoAnulacion"
+                placeholder="Motivo de la anulación">
+            </textarea>
+        </nz-form-control>
+    </nz-form-item>
+</ng-template>
+<ng-template #modalAnularFooter>
+    <div nz-flex nzGap="small" nzJustify="end">
+        <button
+            nz-button
+            nzType="primary"
+            nzDanger
+            [nzLoading]="pagoCommandFacade.isSaving()"
+            (click)="anular()">
+            <nz-icon nzType="stop"></nz-icon>
+            Anular
+        </button>
+        <button nz-button nzType="default" (click)="hideModalAnular()">
+            <nz-icon nzType="close"></nz-icon>
+            Cancelar
         </button>
     </div>
 </ng-template>
