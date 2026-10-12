@@ -21,6 +21,15 @@ nz-header {
     padding: 0;
 }
 
+.usuario {
+    margin-left: auto;
+    padding: 0 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(0, 0, 0, 0.85);
+}
+
 nz-content {
     padding: 16px 24px;
 }

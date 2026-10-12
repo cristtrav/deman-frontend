@@ -1,0 +1,36 @@
+<div class="contenedor">
+    <nz-card class="tarjeta">
+        <div class="encabezado">
+            <div class="logo"></div>
+            <h2>Deman Store</h2>
+            <span class="subtitulo">Iniciar sesión</span>
+        </div>
+        <form nz-form [formGroup]="form" nzLayout="vertical" (ngSubmit)="login()">
+            <nz-form-item>
+                <nz-form-label nzRequired>C.I. N°</nz-form-label>
+                <nz-form-control nzErrorTip="El número de cédula es requerido. Máx. 20 caracteres.">
+                    <nz-input-group nzPrefixIcon="user">
+                        <input nz-input formControlName="ci" placeholder="Ingresar" autocomplete="username" />
+                    </nz-input-group>
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label nzRequired>Contraseña</nz-form-label>
+                <nz-form-control nzErrorTip="La contraseña es requerida. Máx. 72 caracteres.">
+                    <nz-input-group nzPrefixIcon="lock" [nzSuffix]="suffixTemplate">
+                        <input nz-input [type]="passwordVisible ? 'text' : 'password'" formControlName="password"
+                            placeholder="Contraseña" autocomplete="current-password" />
+                    </nz-input-group>
+                    <ng-template #suffixTemplate>
+                        <nz-icon class="ojo" [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+                            (click)="passwordVisible = !passwordVisible" />
+                    </ng-template>
+                </nz-form-control>
+            </nz-form-item>
+            <ng-template #alert></ng-template>
+            <button nz-button nzType="primary" nzBlock type="submit" [nzLoading]="loginFacade.isSaving()">
+                Ingresar
+            </button>
+        </form>
+    </nz-card>
+</div>

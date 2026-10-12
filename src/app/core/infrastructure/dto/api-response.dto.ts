@@ -10,7 +10,7 @@ export interface ApiResponseDTO<T = any> {
 export interface ErrorData {
     code: string
     statusCode: number
-    detail?: any
+    details?: any
 }
 
 export interface PaginationData {

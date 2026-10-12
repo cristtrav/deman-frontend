@@ -41,6 +41,19 @@
             <nz-icon class="trigger flex-item" [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
                 (click)="isCollapsed = !isCollapsed" />
             <core-breadcrumb class="flex-item"></core-breadcrumb>
+            <a class="usuario" nz-dropdown [nzDropdownMenu]="menuUsuario" nzPlacement="bottomRight">
+                <nz-icon nzType="user" />
+                <span>{{ nombreUsuario() }}</span>
+                <nz-icon nzType="down" />
+            </a>
+            <nz-dropdown-menu #menuUsuario="nzDropdownMenu">
+                <ul nz-menu>
+                    <li nz-menu-item (click)="cerrarSesion()">
+                        <nz-icon nzType="logout" />
+                        <span>Cerrar sesión</span>
+                    </li>
+                </ul>
+            </nz-dropdown-menu>
         </nz-header>
         <nz-content>
             <router-outlet></router-outlet>

@@ -1,17 +1,24 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './core/presentation/layout/main-layout/main-layout';
 import { Dashboard } from './feature/dashboard/presentation/page/dashboard/dashboard';
+import { authGuard, guestGuard } from './feature/auth/presentation/guard/auth.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/app/dashboard', pathMatch: 'full' },
     { path: 'app', redirectTo: '/app/dashboard', pathMatch: 'full' },
     {
+        path: 'login',
+        canActivate: [guestGuard],
+        loadComponent: () => import('./feature/auth/presentation/page/login-page/login-page').then(m => m.LoginPage)
+    },
+    {
         // Fuera de MainLayout: la página contiene solo el recibo, lista para imprimir
         path: 'recibos/:numero/imprimir',
+        canActivate: [authGuard],
         loadComponent: () => import('./feature/pago/presentation/page/imprimir-recibo-page/imprimir-recibo-page').then(m => m.ImprimirReciboPage)
     },
     {
-        path: 'app', component: MainLayout, data: { breadcrumb: 'App'}, children: [
+        path: 'app', component: MainLayout, canActivate: [authGuard], data: { breadcrumb: 'App'}, children: [
             { path: 'dashboard', component: Dashboard, data: { breadcrumb: 'Dashboard' } },
             {
                 path: 'marcas',
@@ -63,5 +70,6 @@ export const routes: Routes = [
                 data: { breadcrumb: 'Empresa' }
             }
         ]
-    }
+    },
+    { path: '**', redirectTo: '/app/dashboard' }
 ];
