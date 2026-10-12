@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { NzCardComponent } from 'ng-zorro-antd/card';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { SesionStore } from '../../../../auth/application/sesion.store';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,5 +15,7 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
   styleUrl: './dashboard.scss'
 })
 export class Dashboard {
+  private readonly sesionStore = inject(SesionStore);
 
+  protected readonly nombreUsuario = computed(() => this.sesionStore.usuario()?.nombres ?? '');
 }
