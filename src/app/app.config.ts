@@ -4,7 +4,8 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import appProviders from './app-providers.config';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
+import { authInterceptor } from './feature/auth/infrastructure/http/auth.interceptor';
 import * as AllIcons from '@ant-design/icons-angular/icons';
 import { provideNzIcons } from 'ng-zorro-antd/icon';
 import {es_ES, provideNzI18n } from 'ng-zorro-antd/i18n';
@@ -16,7 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptorsFromDi(), withInterceptors([authInterceptor])),
     provideNzIcons(icons),
     provideNzI18n(es_ES),
     { provide: LOCALE_ID, useValue: 'es_PY' },
