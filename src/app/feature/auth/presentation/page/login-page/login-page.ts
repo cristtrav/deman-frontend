@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzAlertUtil } from '@core/presentation/util/nz-alert.util';
 import componentConfig from './component.config';
 import { LoginFacade } from '../../../application/facade/login.facade';
+import { NombreEmpresaFacade } from '../../../../empresa/application/facade/nombre-empresa.facade';
 
 const RUTA_INICIO = '/app/dashboard';
 
@@ -26,6 +27,7 @@ export class LoginPage {
 
   constructor(
     public readonly loginFacade: LoginFacade,
+    public readonly nombreEmpresaFacade: NombreEmpresaFacade,
     private readonly router: Router,
     private readonly route: ActivatedRoute
   ) {

@@ -6,6 +6,7 @@ import { NzAlertUtil } from '@core/presentation/util/nz-alert.util';
 import componentConfig from './component.config';
 import { EmpresaFacade } from '../../../application/facade/empresa.facade';
 import { EmpresaCommandFacade } from '../../../application/facade/empresa-command.facade';
+import { NombreEmpresaFacade } from '../../../application/facade/nombre-empresa.facade';
 import { Empresa } from '../../../domain/model/empresa.model';
 import { rucValidator } from '../../validator/ruc.validator';
 
@@ -44,6 +45,7 @@ export class EmpresaPage {
   constructor(
     public readonly empresaFacade: EmpresaFacade,
     public readonly empresaCommandFacade: EmpresaCommandFacade,
+    private readonly nombreEmpresaFacade: NombreEmpresaFacade,
     private readonly notif: NzNotificationService
   ) {
     effect(() => {
@@ -65,6 +67,8 @@ export class EmpresaPage {
       } else if(status == 'success'){
         NzAlertUtil.showSuccessAlert(this.alertView(), this.empresaCommandFacade.message());
         this.empresaFacade.reload();
+        // Actualiza el título de la pestaña si cambió el nombre
+        this.nombreEmpresaFacade.reload();
       } else {
         NzAlertUtil.showErrorAlert(this.alertView(), 'Error al guardar', this.empresaCommandFacade.error() ?? '');
       }

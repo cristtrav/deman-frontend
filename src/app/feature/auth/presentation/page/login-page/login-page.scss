@@ -18,6 +18,12 @@
 
     h2 {
         margin: 12px 0 0;
+        transition: opacity 0.2s;
+    }
+
+    // Evita que el nombre predeterminado se vea antes de que llegue el registrado
+    h2.cargando {
+        opacity: 0;
     }
 }
 

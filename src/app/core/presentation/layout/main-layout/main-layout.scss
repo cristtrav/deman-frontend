@@ -12,8 +12,18 @@
 
 .logo {
     height: 32px;
-    background: rgba(255, 255, 255, 0.2);
+    line-height: 32px;
     margin: 16px;
+    padding: 0 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-weight: 600;
+    text-align: center;
+    // Los nombres largos se recortan; el nombre completo queda en el tooltip
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 nz-header {
