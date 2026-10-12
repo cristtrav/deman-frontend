@@ -1,0 +1,18 @@
+
+.pedidos {
+    margin-top: 8px;
+}
+
+.tarjeta {
+    height: 100%;
+}
+
+.ver-todos {
+    display: inline-block;
+    margin-top: 4px;
+}
+
+// Márgenes internos mínimos, igual que en las tarjetas de entregas
+.compacta ::ng-deep .ant-card-body {
+    padding: 8px;
+}

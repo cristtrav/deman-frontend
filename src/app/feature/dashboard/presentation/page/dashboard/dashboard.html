@@ -1,5 +1,45 @@
-<div nz-flex>
-    <nz-card class="flex-item">
-        <h4 nz-typography>Bienvenido/a{{ nombreUsuario() ? ', ' + nombreUsuario() : '' }}</h4>
-    </nz-card>
+<div nz-row [nzGutter]="[8, 8]">
+    <div nz-col nzSpan="24">
+        <div nz-flex>
+            <nz-card class="flex-item">
+                <h4 nz-typography>Bienvenido/a{{ nombreUsuario() ? ', ' + nombreUsuario() : '' }}</h4>
+            </nz-card>
+        </div>
+    </div>
+    <div nz-col nzSpan="24">
+        <div nz-row [nzGutter]="[8, 8]" class="pedidos">
+            <div nz-col [nzXs]="24" [nzMd]="12" [nzXl]="6">
+                <nz-card nzSize="small" class="tarjeta compacta" [nzLoading]="pedidosPendientesFacade.loading()">
+                    <nz-statistic
+                        nzTitle="Pedidos pendientes"
+                        [nzValue]="pedidosPendientesFacade.error() ? '-' : pedidosPendientesFacade.cantidad()"
+                        [nzPrefix]="iconoPendientes">
+                    </nz-statistic>
+                    <a class="ver-todos" routerLink="/app/pedidos">Ver todos los pedidos</a>
+                </nz-card>
+                <ng-template #iconoPendientes><nz-icon nzType="shopping-cart" /></ng-template>
+            </div>
+            <div nz-col [nzXs]="24" [nzMd]="12" [nzXl]="6">
+                <dashboard-proximas-entregas-card
+                    periodo="hoy"
+                    titulo="Entregas de hoy"
+                    textoVacio="No hay entregas pendientes para hoy" />
+            </div>
+            <div nz-col [nzXs]="24" [nzMd]="12" [nzXl]="6">
+                <dashboard-proximas-entregas-card
+                    periodo="semana"
+                    titulo="Entregas de la semana"
+                    textoVacio="No hay entregas pendientes en los próximos días" />
+            </div>
+            <div nz-col [nzXs]="24" [nzMd]="12" [nzXl]="6">
+                <dashboard-proximas-entregas-card
+                    periodo="atrasados"
+                    titulo="Entregas atrasadas"
+                    textoVacio="No hay entregas atrasadas" />
+            </div>
+        </div>
+    </div>
 </div>
+
+
+

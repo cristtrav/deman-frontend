@@ -1,0 +1,49 @@
+<nz-card nzSize="small" [nzTitle]="tituloTpl" [nzExtra]="verMasTpl" class="tarjeta">
+    <nz-table
+        [nzData]="facade.items()"
+        [nzLoading]="facade.loading()"
+        [nzShowPagination]="false"
+        [nzFrontPagination]="false"
+        [nzNoResult]="textoVacio()"
+        nzSize="small">
+        <thead>
+            <tr>
+                <th>Nro.</th>
+                <th>F. Entrega</th>
+                <th>Cliente</th>
+                <th nzWidth="32px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (pedido of facade.items(); track pedido.id) {
+            <tr>
+                <td>{{ pedido.id }}</td>
+                <!-- En los atrasados se muestra el año: pueden ser de otro año -->
+                <td [class.vencida]="periodo() === 'atrasados'">
+                    {{ pedido.fechaEntrega | date:(periodo() === 'atrasados' ? 'dd/MMM/yy' : 'dd/MMM') }}
+                </td>
+                <td class="cliente" [title]="pedido.cliente.razonSocial">{{ pedido.cliente.razonSocial }}</td>
+                <td>
+                    <button nz-button nzType="text" nzSize="small" (click)="verDetalle(pedido)" title="Ver detalle">
+                        <nz-icon nzType="eye" />
+                    </button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </nz-table>
+    @if (facade.error()) {
+        <span class="error">No se pudieron cargar los pedidos</span>
+    }
+</nz-card>
+
+<ng-template #tituloTpl>
+    {{ titulo() }}
+    <nz-badge nzShowZero nzSize="small" [nzCount]="facade.total()" [nzOverflowCount]="999" class="contador" />
+</ng-template>
+<ng-template #verMasTpl>
+    <!-- Solo cuando hay más pedidos de los que entran en la tarjeta -->
+    @if (facade.total() > facade.pageSize()) {
+        <button nz-button nzType="link" nzSize="small" (click)="verMas()">Ver más</button>
+    }
+</ng-template>

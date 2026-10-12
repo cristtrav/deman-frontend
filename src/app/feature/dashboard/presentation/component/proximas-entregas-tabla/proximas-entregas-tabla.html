@@ -1,0 +1,32 @@
+<nz-table #tabla
+    [nzData]="facade.items()"
+    [nzLoading]="facade.loading()"
+    [nzPageSize]="facade.pageSize()"
+    [nzPageIndex]="facade.page()"
+    [nzTotal]="facade.total()"
+    [nzFrontPagination]="false"
+    (nzQueryParams)="onQueryParams($event)"
+    nzSize="small">
+    <thead>
+        <tr>
+            <th>Nro.</th>
+            <th>F. Entrega</th>
+            <th>Cliente</th>
+            <th nzWidth="60px"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (pedido of tabla.data; track pedido.id) {
+        <tr>
+            <td>{{ pedido.id }}</td>
+            <td [class.vencida]="periodo === 'atrasados'">{{ pedido.fechaEntrega | date:'dd/MMM/yyyy' }}</td>
+            <td>{{ pedido.cliente.razonSocial }}</td>
+            <td>
+                <button nz-button nzType="default" nzSize="small" (click)="verDetalle(pedido)">
+                    <nz-icon nzType="eye" />
+                </button>
+            </td>
+        </tr>
+        }
+    </tbody>
+</nz-table>

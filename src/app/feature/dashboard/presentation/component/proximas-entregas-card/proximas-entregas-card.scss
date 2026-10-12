@@ -1,0 +1,59 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.tarjeta {
+    height: 100%;
+}
+
+.contador {
+    margin-left: 6px;
+}
+
+// Diseño compacto: márgenes internos mínimos en la tarjeta y en la tabla.
+// ng-zorro no expone estos espaciados como inputs, por eso se sobrescriben sus clases.
+.tarjeta ::ng-deep {
+    .ant-card-head {
+        min-height: 32px;
+        padding: 0 8px;
+    }
+
+    .ant-card-head-title,
+    .ant-card-extra {
+        padding: 4px 0;
+    }
+
+    .ant-card-body {
+        padding: 0;
+    }
+
+    .ant-table.ant-table-small {
+        .ant-table-thead > tr > th,
+        .ant-table-tbody > tr > td {
+            padding: 2px 6px;
+        }
+    }
+
+    // Quita el espacio extra que deja la tabla vacía
+    .ant-table-placeholder .ant-empty-normal {
+        margin: 8px 0;
+    }
+}
+
+.cliente {
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vencida {
+    color: #ff4d4f;
+}
+
+.error {
+    display: block;
+    padding: 4px 8px;
+    color: #ff4d4f;
+}
