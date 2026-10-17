@@ -1,3 +1,4 @@
+import { environment } from "@environment/environment";
 import { Signal } from "@angular/core";
 import { PaginatedApiResponse } from "@shared/api-model/paginated-api-response.model";
 import { ResourceState } from "@shared/type/resource-state";
@@ -8,7 +9,7 @@ import { httpResource } from "@angular/common/http";
 import { serializeFilter } from "@shared/util/query-field.serializer";
 
 export class PedidoApiService implements PedidoRepository{
-    private readonly url: string = 'http://localhost:3000/api/pedidos';
+    private readonly url: string = `${environment.apiURL}/pedidos`;
 
     findAll(query: Signal<PedidoQuery>): ResourceState<PaginatedApiResponse<Pedido>> {
         const resource = httpResource<PaginatedApiResponse<Pedido>>(() => {

@@ -1,3 +1,4 @@
+import { environment } from "@environment/environment";
 import { httpResource } from "@angular/common/http";
 import { Injectable, computed, signal } from "@angular/core";
 import { ApiResponse } from "@shared/api-model/api-response.model";
@@ -5,7 +6,7 @@ import { Pedido } from "../../domain/model/pedido.model";
 
 @Injectable()
 export class PedidoFacade {
-    private readonly baseUrl: string = 'http://localhost:3000/api/pedidos';
+    private readonly baseUrl: string = `${environment.apiURL}/pedidos`;
     readonly id = signal<number | undefined>(undefined);
 
     readonly resource = httpResource<ApiResponse<Pedido>>(() => {

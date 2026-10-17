@@ -1,3 +1,4 @@
+import { environment } from "@environment/environment";
 import { Injectable } from "@angular/core";
 import { CommandFacade } from "@shared/facade/command.facade";
 import { ApiResponse } from "@shared/api-model/api-response.model";
@@ -7,7 +8,7 @@ import { NewPago } from "../model/new-pago.model";
 // Los pagos no se editan: para corregir uno se anula y se registra uno nuevo
 @Injectable()
 export class PagoCommandFacade extends CommandFacade<Pago, NewPago, never> {
-    constructor(){ super('http://localhost:3000/api/pagos'); }
+    constructor(){ super(`${environment.apiURL}/pagos`); }
 
     anular(id: number, motivo: string){
         this.status.set('saving');
