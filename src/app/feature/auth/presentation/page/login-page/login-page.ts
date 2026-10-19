@@ -18,6 +18,7 @@ const RUTA_INICIO = '/app/dashboard';
 export class LoginPage {
   readonly alertView = viewChild.required('alert', { read: ViewContainerRef });
   passwordVisible = false;
+  logoCargado = false;
 
   form = new FormGroup({
     ci: new FormControl<string | null>(null, [Validators.required, Validators.pattern(/\S/), Validators.maxLength(20)]),

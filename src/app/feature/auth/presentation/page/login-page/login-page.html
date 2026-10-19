@@ -1,7 +1,8 @@
 <div class="contenedor">
     <nz-card class="tarjeta">
         <div class="encabezado">
-            <div class="logo"></div>
+            <img class="logo" src="logo.png" alt="Logo" [class.oculto]="!logoCargado"
+                (load)="logoCargado = true" (error)="logoCargado = false" />
             <h2 [class.cargando]="nombreEmpresaFacade.loading()">{{ nombreEmpresaFacade.nombre() }}</h2>
             <span class="subtitulo">Iniciar sesión</span>
         </div>

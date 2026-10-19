@@ -28,11 +28,16 @@
 }
 
 .logo {
+    display: block;
     height: 32px;
-    width: 120px;
+    max-width: 120px;
     margin: 0 auto;
-    background: #001529;
-    border-radius: 4px;
+    object-fit: contain;
+
+    // Oculto mientras no se encuentre la imagen
+    &.oculto {
+        display: none;
+    }
 }
 
 .subtitulo {
