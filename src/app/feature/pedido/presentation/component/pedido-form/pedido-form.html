@@ -22,18 +22,28 @@
         </nz-form-label>
         <nz-form-control [nzSm]="16" [nzXs]="24" 
             nzErrorTip="El cliente es requerido">
-            <nz-select
-                formControlName="clienteId"
-                [nzPlaceHolder]="'Seleccionar...'"
-                [nzShowSearch]="true"
-                [nzAllowClear]="true">
-                @for (cliente  of clienteFacade.itemList(); track cliente.id) {
-                <nz-option
-                    [nzValue]="cliente.id"
-                    [nzLabel]="cliente.razonSocial">
-                </nz-option> 
-                }
-            </nz-select>
+            <div class="cliente-select">
+                <nz-select
+                    formControlName="clienteId"
+                    [nzPlaceHolder]="'Seleccionar...'"
+                    [nzShowSearch]="true"
+                    [nzAllowClear]="true">
+                    @for (cliente  of clienteOptions(); track cliente.id) {
+                    <nz-option
+                        [nzValue]="cliente.id"
+                        [nzLabel]="cliente.razonSocial">
+                    </nz-option>
+                    }
+                </nz-select>
+                <button
+                    nz-button
+                    type="button"
+                    nzType="default"
+                    title="Registrar nuevo cliente"
+                    (click)="showClienteModal()">
+                    <nz-icon nzType="user-add"></nz-icon>
+                </button>
+            </div>
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -116,3 +126,32 @@
     </nz-form-item>
 </form>
 <ng-template #alert></ng-template>
+
+<nz-modal
+    [(nzVisible)]="isClienteModalVisible"
+    [nzTitle]="'Nuevo cliente'"
+    [nzContent]="clienteModalContent"
+    [nzFooter]="clienteModalFooter"
+    (nzOnCancel)="hideClienteModal()">
+</nz-modal>
+<ng-template #clienteModalContent>
+    <cliente-form
+        [mode]="'add'"
+        (isSavingChange)="isSavingCliente.set($event)"
+        (savedCliente)="onClienteCreado($event)">
+    </cliente-form>
+</ng-template>
+<ng-template #clienteModalFooter>
+    <button
+        nz-button
+        nzType="primary"
+        [nzLoading]="isSavingCliente()"
+        (click)="clienteFormView()?.save()">
+        <nz-icon nzType="save"></nz-icon>
+        Registrar
+    </button>
+    <button nz-button nzType="default" (click)="hideClienteModal()">
+        <nz-icon nzType="close"></nz-icon>
+        Cerrar
+    </button>
+</ng-template>

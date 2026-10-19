@@ -1,0 +1,9 @@
+.cliente-select {
+    display: flex;
+    gap: 8px;
+
+    nz-select {
+        flex: 1;
+        min-width: 0;
+    }
+}

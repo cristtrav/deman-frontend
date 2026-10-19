@@ -114,7 +114,7 @@ export class ClienteForm {
       .subscribe({
         next: savedCliente => {
           this.showSuccessAlert('Cliente creado');
-          this.savedCliente.emit();
+          this.savedCliente.emit(savedCliente);
           this.editingCliente = savedCliente;
           this.loadFormData(savedCliente);
           this.mode = 'edit';

@@ -6,7 +6,9 @@ import { NzIconModule } from "ng-zorro-antd/icon";
 import { NzInputModule } from "ng-zorro-antd/input";
 import { NzInputNumberModule } from "ng-zorro-antd/input-number";
 import { NzSelectModule } from "ng-zorro-antd/select";
+import { NzModalModule } from "ng-zorro-antd/modal";
 import { PedidoCommandFacade } from "../../../application/facade/pedido-command.facade";
+import { ClienteForm } from "../../../../cliente/presentation/component/cliente-form/cliente-form";
 
 export default {
     imports: [
@@ -17,7 +19,9 @@ export default {
         NzButtonModule,
         NzSelectModule,
         NzInputNumberModule,
-        NzIconModule
+        NzIconModule,
+        NzModalModule,
+        ClienteForm
     ],
     providers: [
         PedidoCommandFacade

@@ -11,6 +11,7 @@ import { NewPedido } from '../../../application/model/new-pedido.model';
 import { formatDate } from '@angular/common';
 import { NzAlertUtil } from '@core/presentation/util/nz-alert.util';
 import { EditPedido } from '../../../application/model/edit-pedido.model';
+import { ClienteForm } from '../../../../cliente/presentation/component/cliente-form/cliente-form';
 
 @Component({
   selector: 'pedido-form',
@@ -26,7 +27,17 @@ export class PedidoForm {
   readonly isSavingChange = output<boolean>();
   readonly isSaving = computed(() => this.pedidoCommandFacade.isSaving());
   readonly savedPedido = output<Pedido | null>();
-  readonly clientesList = signal<Cliente[]>([]);
+  readonly clientesCreados = signal<Cliente[]>([]);
+  // Los clientes registrados desde este formulario se agregan a las opciones,
+  // ya que pueden no venir en la página actual de la consulta de clientes
+  readonly clienteOptions = computed<Cliente[]>(() => {
+    const lista = this.clienteFacade.itemList();
+    const nuevos = this.clientesCreados().filter(c => !lista.some(l => l.id == c.id));
+    return [...lista, ...nuevos];
+  });
+  readonly isClienteModalVisible = signal(false);
+  readonly isSavingCliente = signal(false);
+  readonly clienteFormView = viewChild(ClienteForm);
   readonly alertView = viewChild.required('alert', {read: ViewContainerRef});
   readonly pedidoEdit = input<Pedido>();
   readonly reload = output<number>();
@@ -107,6 +118,16 @@ export class PedidoForm {
     const entregaDate = TemporalUtil.toTemporalDate(this.form.controls.fechaEntrega.value ?? new Date());
     if(this.form.controls.fechaEntrega.value == null) return false;
     return Temporal.PlainDate.compare(curr, entregaDate) < 0;
+  }
+
+  showClienteModal(){ this.isClienteModalVisible.set(true); }
+  hideClienteModal(){ this.isClienteModalVisible.set(false); }
+
+  onClienteCreado(cliente: Cliente){
+    this.clientesCreados.update(lista => [...lista, { id: cliente.id, razonSocial: cliente.razonSocial }]);
+    this.form.controls.clienteId.setValue(cliente.id);
+    this.clienteFacade.reload();
+    this.hideClienteModal();
   }
 
   switchIdMode(){
