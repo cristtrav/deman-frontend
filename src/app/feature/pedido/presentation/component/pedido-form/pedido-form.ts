@@ -1,4 +1,6 @@
 import { Component, computed, effect, ElementRef, Inject, input, LOCALE_ID, model, output, signal, viewChild, ViewContainerRef } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { debounceTime, distinctUntilChanged, skip } from 'rxjs';
 import componentConfig from './component.config';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Pedido } from '../../../domain/model/pedido.model';
@@ -28,12 +30,19 @@ export class PedidoForm {
   readonly isSaving = computed(() => this.pedidoCommandFacade.isSaving());
   readonly savedPedido = output<Pedido | null>();
   readonly clientesCreados = signal<Cliente[]>([]);
-  // Los clientes registrados desde este formulario se agregan a las opciones,
-  // ya que pueden no venir en la página actual de la consulta de clientes
+  readonly clienteSearch = signal('');
+  // Además de las páginas cargadas, se incluyen el cliente del pedido en edición
+  // y los registrados desde este formulario, para que el select muestre su nombre
+  // aunque todavía no se haya cargado la página en la que aparecen
   readonly clienteOptions = computed<Cliente[]>(() => {
     const lista = this.clienteFacade.itemList();
-    const nuevos = this.clientesCreados().filter(c => !lista.some(l => l.id == c.id));
-    return [...lista, ...nuevos];
+    const texto = this.clienteSearch().trim().toLowerCase();
+    const clienteEdit = this.mode() == 'edit' ? this.pedidoEdit()?.cliente : undefined;
+    const extras = [...(clienteEdit ? [clienteEdit] : []), ...this.clientesCreados()]
+      .filter((c, i, arr) => arr.findIndex(o => o.id == c.id) == i)
+      .filter(c => !lista.some(l => l.id == c.id))
+      .filter(c => c.razonSocial.toLowerCase().includes(texto));
+    return [...lista, ...extras];
   });
   readonly isClienteModalVisible = signal(false);
   readonly isSavingCliente = signal(false);
@@ -58,6 +67,12 @@ export class PedidoForm {
     public readonly clienteFacade: ClienteFacade,
     public readonly pedidoCommandFacade: PedidoCommandFacade
   ) {
+    toObservable(this.clienteSearch).pipe(
+      skip(1),
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntilDestroyed()
+    ).subscribe(texto => this.clienteFacade.buscar(texto));
     effect(() => {
       const currMode = this.mode();
       const currPedidoEdit = this.pedidoEdit();
@@ -118,6 +133,11 @@ export class PedidoForm {
     const entregaDate = TemporalUtil.toTemporalDate(this.form.controls.fechaEntrega.value ?? new Date());
     if(this.form.controls.fechaEntrega.value == null) return false;
     return Temporal.PlainDate.compare(curr, entregaDate) < 0;
+  }
+
+  onClienteSelectOpenChange(open: boolean){
+    // Al cerrar el desplegable se descarta la búsqueda para que al reabrirlo se vean todos
+    if(!open && this.clienteSearch()) this.clienteSearch.set('');
   }
 
   showClienteModal(){ this.isClienteModalVisible.set(true); }

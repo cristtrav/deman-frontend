@@ -27,7 +27,12 @@
                     formControlName="clienteId"
                     [nzPlaceHolder]="'Seleccionar...'"
                     [nzShowSearch]="true"
-                    [nzAllowClear]="true">
+                    [nzServerSearch]="true"
+                    [nzAllowClear]="true"
+                    [nzDropdownRender]="clientesLoading"
+                    (nzOnSearch)="clienteSearch.set($event)"
+                    (nzOpenChange)="onClienteSelectOpenChange($event)"
+                    (nzScrollToBottom)="clienteFacade.cargarMas()">
                     @for (cliente  of clienteOptions(); track cliente.id) {
                     <nz-option
                         [nzValue]="cliente.id"
@@ -35,6 +40,14 @@
                     </nz-option>
                     }
                 </nz-select>
+                <ng-template #clientesLoading>
+                    @if (clienteFacade.loading()) {
+                    <div class="clientes-loading">
+                        <nz-icon nzType="loading"></nz-icon>
+                        Cargando...
+                    </div>
+                    }
+                </ng-template>
                 <button
                     nz-button
                     type="button"
