@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './core/presentation/layout/main-layout/main-layout';
 import { Dashboard } from './feature/dashboard/presentation/page/dashboard/dashboard';
-import { authGuard, guestGuard } from './feature/auth/presentation/guard/auth.guard';
+import { adminGuard, authGuard, guestGuard } from './feature/auth/presentation/guard/auth.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/app/dashboard', pathMatch: 'full' },
@@ -47,6 +47,7 @@ export const routes: Routes = [
             },
             {
                 path: 'usuarios',
+                canActivate: [adminGuard],
                 loadComponent: () => import('./feature/usuario/presentation/page/usuarios/usuarios.page').then(u => u.UsuariosPage),
                 data: { breadcrumb: 'Usuarios'}
             },

@@ -8,8 +8,8 @@ export class UsuarioDTOMapper {
             nombres: usuarioDto.nombres,
             apellidos: usuarioDto.apellidos,
             ci: usuarioDto.ci,
-            password: usuarioDto.password,
-            activo: usuarioDto.activo
+            activo: usuarioDto.activo,
+            isAdmin: usuarioDto.isAdmin
         }
     }
 
@@ -19,8 +19,8 @@ export class UsuarioDTOMapper {
             nombres: usuario.nombres,
             apellidos: usuario.apellidos,
             ci: usuario.ci,
-            password: usuario.password,
-            activo: usuario.activo
+            activo: usuario.activo,
+            isAdmin: usuario.isAdmin
         }
     }
 }

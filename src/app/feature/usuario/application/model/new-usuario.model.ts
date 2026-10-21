@@ -5,4 +5,5 @@ export interface NewUsuario {
     ci: string
     password: string
     activo: boolean
+    isAdmin: boolean
 }

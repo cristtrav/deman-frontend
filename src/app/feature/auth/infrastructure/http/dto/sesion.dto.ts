@@ -3,6 +3,7 @@ export interface UsuarioSesionDTO {
     nombres: string
     apellidos: string
     ci: string
+    isAdmin: boolean
 }
 
 export interface SesionDTO {

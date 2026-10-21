@@ -7,6 +7,8 @@ import { ApiResponseDTO } from "@core/infrastructure/dto/api-response.dto";
 import { Usuario } from "../../../application/model/usuario.model";
 import { UsuarioDTO } from "../dto/usuario.dto";
 import { UsuarioDTOMapper } from "../mapper/usuario-dto.mapper";
+import { UsuarioDTOMapper as NewUsuarioDTOMapper } from "../mapper/new-usuario-dto.mapper";
+import { NewUsuario } from "../../../application/model/new-usuario.model";
 import { QueryContract } from "@core/application/contract/query/query.contract";
 
 @Injectable({ providedIn: 'root' })
@@ -50,9 +52,9 @@ export class UsuarioHttpRepository implements UsuarioRepository {
         );
     }
 
-    create(usuario: Usuario): Observable<Usuario> {
+    create(usuario: NewUsuario): Observable<Usuario> {
         return this.http.post<ApiResponseDTO<UsuarioDTO>>(
-            this.apiUrl, UsuarioDTOMapper.toDTO(usuario)
+            this.apiUrl, NewUsuarioDTOMapper.toDTO(usuario)
         ).pipe(
             map(resp => {
                 if (resp.data == null) throw new Error('No se recibieron datos del usuario registrado');

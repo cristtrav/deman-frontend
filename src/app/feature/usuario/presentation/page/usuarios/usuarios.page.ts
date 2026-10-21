@@ -5,6 +5,7 @@ import { NzFlexDirective } from 'ng-zorro-antd/flex';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 import { UsuarioForm } from '../../../../usuario/presentation/component/usuario-form/usuario-form';
 import { Usuario } from '../../../application/model/usuario.model';
 import { ToolbarButton } from '@core/presentation/model/toolbar-button.model';
@@ -25,6 +26,7 @@ import { NzAlertComponent, NzAlertModule } from 'ng-zorro-antd/alert';
   imports: [
     FeatureLayout,
     NzTableModule,
+    NzTagModule,
     NzFlexDirective,
     NzButtonComponent,
     NzIconModule,
@@ -156,7 +158,7 @@ export class UsuariosPage implements OnInit {
           this.cargarDatos();
         },
         error: (e) => {
-          this.showErrorAlert('Error al editar contraseña', e.message);
+          this.showErrorAlert('Error al editar contraseña', e.error?.message ?? e.message);
         }
       });
   }
@@ -208,7 +210,7 @@ export class UsuariosPage implements OnInit {
         },
         error: (e) => {
           console.error('Error al eliminar usuario', e);
-          this.notif.error('Error al eliminar usuario', e.message);
+          this.notif.error('Error al eliminar usuario', e.error?.message ?? e.message);
         }
       })
   }

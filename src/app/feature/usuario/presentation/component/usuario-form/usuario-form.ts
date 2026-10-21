@@ -11,6 +11,7 @@ import { } from 'ng-zorro-antd/icon';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
 
 @Component({
   selector: 'usuario-form',
@@ -22,6 +23,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
     NzAlertModule,
     NzButtonComponent,
     NzIconModule,
+    NzSwitchModule,
   ],
   templateUrl: './usuario-form.html',
   styleUrl: './usuario-form.scss'
@@ -42,6 +44,10 @@ export class UsuarioForm implements OnInit {
   set mode(m: 'add' | 'edit' | 'editPassword') {
     this._mode = m;
     if (m == 'edit') this.idMode = 'manual';
+    // En edición la contraseña no se muestra ni se envía; se cambia desde la opción de contraseña
+    if (m == 'edit') this.form.controls.password.clearValidators();
+    else this.form.controls.password.setValidators([Validators.required, Validators.maxLength(50)]);
+    this.form.controls.password.updateValueAndValidity();
     this.modeChange.emit(m);
   }
   get mode(): 'add' | 'edit' | 'editPassword' { return this._mode }
@@ -79,7 +85,8 @@ export class UsuarioForm implements OnInit {
     apellidos: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(50)]),
     ci: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(50)]),
     password: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(50)]),
-    activo: new FormControl<boolean | true>(true, [Validators.required])
+    activo: new FormControl<boolean | true>(true, [Validators.required]),
+    isAdmin: new FormControl<boolean>(false, { nonNullable: true })
   })
 
   constructor(
@@ -90,8 +97,6 @@ export class UsuarioForm implements OnInit {
   ngOnInit(): void {
     if (this.mode == 'edit' && this.editingUsuario) {
       this.loadFormData(this.editingUsuario);
-      this.form.controls.password.clearValidators();
-      this.form.controls.password.updateValueAndValidity();
     }
   }
 
@@ -118,7 +123,8 @@ export class UsuarioForm implements OnInit {
         apellidos: this.form.controls.apellidos.value ?? '',
         ci: this.form.controls.ci.value ?? '',
         password: this.form.controls.password.value ?? '',
-        activo: this.form.controls.activo.value ?? true
+        activo: this.form.controls.activo.value ?? true,
+        isAdmin: this.form.controls.isAdmin.value
       }
     })
       .pipe(
@@ -134,7 +140,7 @@ export class UsuarioForm implements OnInit {
         },
         error: e => {
           console.error('Error al crear usuario', e);
-          this.showErrorAlert('Error al crear usuario', e.message);
+          this.showErrorAlert('Error al crear usuario', e.error?.message ?? e.message);
         }
       });
   }
@@ -148,8 +154,8 @@ export class UsuarioForm implements OnInit {
         nombres: this.form.controls.nombres.value ?? '',
         apellidos: this.form.controls.apellidos.value ?? '',
         ci: this.form.controls.ci.value ?? '',
-        password: this.form.controls.password.value ?? '',
-        activo: this.form.controls.activo.value ?? true
+        activo: this.form.controls.activo.value ?? true,
+        isAdmin: this.form.controls.isAdmin.value
       }
     }).pipe(
       finalize(() => this.isSaving = false)
@@ -163,7 +169,7 @@ export class UsuarioForm implements OnInit {
         },
         error: (e) => {
           console.error(e);
-          this.showErrorAlert('Error al editar usuario', e.message);
+          this.showErrorAlert('Error al editar usuario', e.error?.message ?? e.message);
         }
       })
   }
@@ -173,8 +179,9 @@ export class UsuarioForm implements OnInit {
     this.form.controls.nombres.setValue(usuario.nombres);
     this.form.controls.apellidos.setValue(usuario.apellidos);
     this.form.controls.ci.setValue(usuario.ci);
-    this.form.controls.password.setValue(usuario.password);
+    this.form.controls.password.reset();
     this.form.controls.activo.setValue(usuario.activo);
+    this.form.controls.isAdmin.setValue(usuario.isAdmin);
   }
 
   private showSuccessAlert(message: string, description?: string) {

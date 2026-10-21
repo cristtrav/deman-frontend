@@ -14,7 +14,8 @@ export class CrearUsuarioUseCase {
             apellidos: command.data.apellidos,
             ci: command.data.ci,
             password: command.data.password,
-            activo: command.data.activo
+            activo: command.data.activo,
+            isAdmin: command.data.isAdmin
         })
     }
 }

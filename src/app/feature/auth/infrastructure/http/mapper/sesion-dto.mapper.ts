@@ -16,7 +16,8 @@ export class SesionDTOMapper {
                 id: sesionDto.usuario.id,
                 nombres: sesionDto.usuario.nombres,
                 apellidos: sesionDto.usuario.apellidos,
-                ci: sesionDto.usuario.ci
+                ci: sesionDto.usuario.ci,
+                isAdmin: sesionDto.usuario.isAdmin === true
             }
         }
     }

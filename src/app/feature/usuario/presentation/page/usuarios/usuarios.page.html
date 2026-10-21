@@ -6,6 +6,7 @@
                 <th>Nombres</th>
                 <th>Apellidos</th>
                 <th>C.I</th>
+                <th>Administrador</th>
                 <th>Acción</th>
             </tr>
         </thead>
@@ -16,6 +17,11 @@
                 <td>{{ usuario.nombres }}</td>
                 <td>{{ usuario.apellidos }}</td>
                 <td>{{ usuario.ci }}</td>
+                <td>
+                    @if (usuario.isAdmin) {
+                    <nz-tag nzColor="blue">Sí</nz-tag>
+                    }
+                </td>
                 <td nz-flex nzGap="small" nzJustify="center">
                     <button nz-button nzType="primary" (click)="editUsuario(usuario)">
                         <nz-icon nzType="edit"></nz-icon>

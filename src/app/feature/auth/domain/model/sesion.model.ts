@@ -3,6 +3,8 @@ export interface UsuarioSesion {
     nombres: string
     apellidos: string
     ci: string
+    // Solo para mostrar u ocultar opciones: el backend verifica el permiso en cada operación
+    isAdmin: boolean
 }
 
 export interface Sesion {

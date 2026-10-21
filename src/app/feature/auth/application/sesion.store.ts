@@ -9,6 +9,8 @@ export class SesionStore {
     readonly sesion = this._sesion.asReadonly();
     readonly usuario = computed(() => this._sesion()?.usuario ?? null);
     readonly autenticado = computed(() => this._sesion() != null);
+    // Las sesiones guardadas antes de existir el permiso no lo traen: se actualiza al renovar el token
+    readonly esAdmin = computed(() => this._sesion()?.usuario.isAdmin === true);
 
     iniciar(sesion: Sesion) {
         this._sesion.set(sesion);

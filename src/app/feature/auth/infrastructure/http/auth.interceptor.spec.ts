@@ -20,7 +20,7 @@ describe('authInterceptor', () => {
         tokenType: 'Bearer',
         accessExpiraEn,
         refreshExpiraEn: Date.now() + 86_400_000,
-        usuario: { id: 1, nombres: 'Juan', apellidos: 'Pérez', ci: '1234567' }
+        usuario: { id: 1, nombres: 'Juan', apellidos: 'Pérez', ci: '1234567', isAdmin: false }
     });
 
     const sesionDto = (accessToken: string) => ({
@@ -30,7 +30,7 @@ describe('authInterceptor', () => {
             refreshToken: 'refresh2',
             tokenType: 'Bearer',
             expiresIn: 900,
-            usuario: { id: 1, nombres: 'Juan', apellidos: 'Pérez', ci: '1234567' }
+            usuario: { id: 1, nombres: 'Juan', apellidos: 'Pérez', ci: '1234567', isAdmin: false }
         }
     });
 

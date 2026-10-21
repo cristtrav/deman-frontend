@@ -45,6 +45,14 @@
             <input nz-input formControlName="ci" placeholder="Ingresar" />
         </nz-form-control>
     </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24">
+            Administrador
+        </nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24" nzExtra="Puede registrar y administrar usuarios.">
+            <nz-switch formControlName="isAdmin"></nz-switch>
+        </nz-form-control>
+    </nz-form-item>
     }
    @if (mode === 'add'){
     <nz-form-item>

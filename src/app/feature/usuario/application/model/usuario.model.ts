@@ -3,6 +3,6 @@ export interface Usuario {
     nombres: string
     apellidos: string
     ci: string
-    password: string
     activo: boolean
+    isAdmin: boolean
 }

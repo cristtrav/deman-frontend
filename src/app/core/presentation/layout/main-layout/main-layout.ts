@@ -33,6 +33,7 @@ export class MainLayout {
     return usuario ? `${usuario.nombres} ${usuario.apellidos}` : '';
   });
 
+  protected readonly esAdmin = inject(SesionStore).esAdmin;
   protected readonly nombreEmpresa = inject(NombreEmpresaFacade).nombre;
   // Con el menú colapsado solo entran las iniciales: "Deman Store" → "DS"
   protected readonly inicialesEmpresa = computed(() =>

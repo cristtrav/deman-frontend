@@ -5,4 +5,5 @@ export interface NewUsuarioDTO{
     ci: string
     password: string
     activo: boolean
+    isAdmin: boolean
 }

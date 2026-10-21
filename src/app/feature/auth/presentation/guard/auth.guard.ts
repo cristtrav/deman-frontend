@@ -9,6 +9,10 @@ export const authGuard: CanActivateFn = (_route, state) => {
     return inject(Router).createUrlTree(['/login'], { queryParams: { returnUrl: state.url } });
 }
 
+// Solo para la navegación: el backend rechaza igualmente las operaciones de quien no es administrador
+export const adminGuard: CanActivateFn = () =>
+    inject(SesionStore).esAdmin() ? true : inject(Router).createUrlTree(['/app/dashboard']);
+
 // Evita mostrar el login a quien ya tiene una sesión vigente
 export const guestGuard: CanActivateFn = () =>
     inject(SesionStore).vigente() ? inject(Router).createUrlTree(['/app/dashboard']) : true;

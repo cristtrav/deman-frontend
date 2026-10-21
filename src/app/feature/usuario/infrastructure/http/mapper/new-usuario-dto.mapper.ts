@@ -10,7 +10,8 @@ export class UsuarioDTOMapper {
             apellidos: newUsuarioDto.apellidos,
             ci: newUsuarioDto.ci,
             password: newUsuarioDto.password,
-            activo: newUsuarioDto.activo
+            activo: newUsuarioDto.activo,
+            isAdmin: newUsuarioDto.isAdmin
         }
     }
 
@@ -21,7 +22,8 @@ export class UsuarioDTOMapper {
             apellidos: usuario.apellidos,
             ci: usuario.ci,
             password: usuario.password,
-            activo: usuario.activo
+            activo: usuario.activo,
+            isAdmin: usuario.isAdmin
         }
     }
 }
